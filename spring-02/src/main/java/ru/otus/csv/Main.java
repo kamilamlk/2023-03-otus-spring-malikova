@@ -1,12 +1,17 @@
 package ru.otus.csv;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import ru.otus.csv.service.QuestionsService;
 
 /**
  * Main class.
  */
+@PropertySource("classpath:application.properties")
+@Configuration
+@ComponentScan
 public class Main {
   /**
    * Entry point to the application
@@ -16,8 +21,8 @@ public class Main {
    *
    */
   public static void main(String[] args) {
-    ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-context.xml");
+    AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Main.class);
     QuestionsService questionsService = ctx.getBean(QuestionsService.class);
-    questionsService.showQuestions();
+    questionsService.quiz();
   }
 }

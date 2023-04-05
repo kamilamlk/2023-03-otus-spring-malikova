@@ -1,21 +1,27 @@
 package ru.otus.csv.dao;
 
-import ru.otus.csv.mapper.QuestionMapper;
-import ru.otus.csv.model.Question;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+import ru.otus.csv.mapper.QuestionMapper;
+import ru.otus.csv.model.Question;
 
 /**
  * Reads questions from csv file.
  */
+@Repository
 public class CsvQuestionsDao implements QuestionsDao {
   private final String csvFileName;
   private final QuestionMapper<String> mapper;
 
-  public CsvQuestionsDao(String csvFileName, QuestionMapper<String> mapper) {
+  public CsvQuestionsDao(
+          @Value("${question.csvFilename}") String csvFileName,
+          QuestionMapper<String> mapper
+  ) {
     this.csvFileName = csvFileName;
     this.mapper = mapper;
   }

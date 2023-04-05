@@ -8,10 +8,15 @@ import java.util.List;
 public class Question {
   private final String question;
   private final List<String> options;
+  private final String correctAnswer;
 
-  public Question(String question, List<String> options) {
+  /**
+   * Default constructor.
+   */
+  public Question(String question, List<String> options, String correctAnswer) {
     this.question = question;
     this.options = options;
+    this.correctAnswer = correctAnswer;
   }
 
   public String getQuestion() {
@@ -20,5 +25,13 @@ public class Question {
 
   public List<String> getOptions() {
     return options;
+  }
+
+  public String getCorrectAnswer() {
+    return correctAnswer;
+  }
+
+  public boolean isCorrectOption(int optionId) {
+    return options.get(optionId).equals(correctAnswer);
   }
 }

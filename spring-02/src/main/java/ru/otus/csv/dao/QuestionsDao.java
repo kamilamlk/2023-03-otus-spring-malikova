@@ -1,7 +1,7 @@
 package ru.otus.csv.dao;
 
-import ru.otus.csv.model.Question;
 import java.util.List;
+import ru.otus.csv.model.Question;
 
 /**
  * Reads questions from a datasource.
