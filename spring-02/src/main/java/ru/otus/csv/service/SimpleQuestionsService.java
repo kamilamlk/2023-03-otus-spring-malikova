@@ -1,7 +1,6 @@
 package ru.otus.csv.service;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.stereotype.Service;
 import ru.otus.csv.dao.QuestionsDao;
 import ru.otus.csv.model.Question;
@@ -25,17 +24,17 @@ public class SimpleQuestionsService implements QuestionsService {
   @Override
   public void quiz() {
     String name = getUsername();
-    AtomicInteger correctAnswers = new AtomicInteger();
+    int correctAnswers = 0;
 
     List<Question> questions = questionsDao.findQuestions();
-    questions.forEach(q -> {
+    for (Question q : questions) {
       int selectedOptionId = getAnswerForQuestion(q);
       if (q.isCorrectOption(selectedOptionId)) {
-        correctAnswers.getAndIncrement();
+        correctAnswers++;
       }
-    });
+    }
 
-    ioService.writeLine(String.format(RESPONSE_TEMPLATE, name, correctAnswers.get()));
+    ioService.writeLine(String.format(RESPONSE_TEMPLATE, name, correctAnswers));
   }
 
   private String getUsername() {
