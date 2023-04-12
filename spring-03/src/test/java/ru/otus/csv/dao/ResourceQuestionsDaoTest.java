@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PropertiesQuestionsDaoTest {
+public class ResourceQuestionsDaoTest {
   private final String rawQuestions = "In which Italian city can you find the Colosseum?, Venice, Rome, Naples, Milan, Rome;Who wrote Catch-22?, Mark Twain, Ernest Hemingway, Charles Dickens, Joseph Heller, Joseph Heller";
 
   private final QuestionMapper<String> questionMapper = new StringToQuestionMapper();
@@ -29,7 +29,7 @@ public class PropertiesQuestionsDaoTest {
     when(messageSource.getMessage(anyString(), any(), any()))
             .thenReturn(rawQuestions);
 
-    PropertiesQuestionsDao dao = new PropertiesQuestionsDao(questionMapper, messageSource);
+    ResourceQuestionsDao dao = new ResourceQuestionsDao(questionMapper, messageSource);
 
     List<Question> questions = dao.findQuestions("question", Locale.ENGLISH);
 

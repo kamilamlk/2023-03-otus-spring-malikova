@@ -12,13 +12,13 @@ import ru.otus.csv.model.Question;
  * Reads questions from csv file.
  */
 @Repository
-public class PropertiesQuestionsDao implements QuestionsDao {
+public class ResourceQuestionsDao implements QuestionsDao {
   private static final String SEPARATOR = ";";
 
   private final QuestionMapper<String> mapper;
   private final MessageSource messageSource;
 
-  public PropertiesQuestionsDao(
+  public ResourceQuestionsDao(
           QuestionMapper<String> mapper,
           MessageSource messageSource) {
     this.mapper = mapper;
