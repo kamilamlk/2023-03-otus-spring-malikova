@@ -18,3 +18,17 @@ Production-ready приложение на Spring Boot
    * использовать ANSI-цвета для баннера.
    * если Ваш язык отличается от русского и английского - локализовать в нём.
    * Коммитить wrapper или нет в репозиторий - решать Вам.
+
+## Сборка и запуск приложения ##
+1. Сборка приложения
+   ```
+   mvn package
+   ```
+2. Запуск приложения
+   ```
+   java -jar target/spring-03-0.0.1-SNAPSHOT-exec.jar
+   ```
+3. Запуск с параметрами
+   ```
+   java -jar target/spring-03-0.0.1-SNAPSHOT-exec.jar --application.quiz.locale=uz
+   ```

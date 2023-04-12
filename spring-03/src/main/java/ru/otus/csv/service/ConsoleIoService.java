@@ -1,9 +1,9 @@
 package ru.otus.csv.service;
 
-import org.springframework.stereotype.Service;
-import ru.otus.csv.model.Question;
 import java.util.List;
 import java.util.Scanner;
+import org.springframework.stereotype.Service;
+import ru.otus.csv.model.Question;
 
 /**
  * Reads from and writes to console.

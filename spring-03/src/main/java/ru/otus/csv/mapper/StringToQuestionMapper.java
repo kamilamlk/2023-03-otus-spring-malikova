@@ -1,9 +1,9 @@
 package ru.otus.csv.mapper;
 
-import org.springframework.stereotype.Component;
-import ru.otus.csv.model.Question;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.stereotype.Component;
+import ru.otus.csv.model.Question;
 
 /**
  * Maps string object to question object.
