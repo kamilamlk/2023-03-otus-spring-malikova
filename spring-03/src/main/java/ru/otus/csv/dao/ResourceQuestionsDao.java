@@ -27,8 +27,7 @@ public class ResourceQuestionsDao implements QuestionsDao {
 
   @Override
   public List<Question> findQuestions(String code, Locale locale) {
-    String message = messageSource.getMessage(code, null, locale);
-    List<String> rawQuestions = List.of(message.split(SEPARATOR));
+    List<String> rawQuestions = getRawQuestions(code, locale);
 
     List<Question> questions = new ArrayList<>();
     for (String rawQuestion : rawQuestions) {
@@ -45,5 +44,10 @@ public class ResourceQuestionsDao implements QuestionsDao {
   @Override
   public String getMessageFromTemplate(String code, String[] params, Locale locale) {
     return messageSource.getMessage(code, params, locale);
+  }
+
+  private List<String> getRawQuestions(String code, Locale locale) {
+    String message = messageSource.getMessage(code, null, locale);
+    return List.of(message.split(SEPARATOR));
   }
 }

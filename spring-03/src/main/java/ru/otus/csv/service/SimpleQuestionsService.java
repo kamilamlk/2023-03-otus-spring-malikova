@@ -33,7 +33,7 @@ public class SimpleQuestionsService implements QuestionsService {
 
   @Override
   public void quiz() {
-    String name = getUsername();
+    String name = askUsername();
     int correctAnswers = 0;
 
     List<Question> questions = questionsDao.findQuestions(
@@ -41,7 +41,7 @@ public class SimpleQuestionsService implements QuestionsService {
             properties.getLocale()
     );
     for (Question q : questions) {
-      int selectedOptionId = getAnswerForQuestion(q);
+      int selectedOptionId = answerToQuestion(q);
       if (q.isCorrectOption(selectedOptionId)) {
         correctAnswers++;
       }
@@ -56,7 +56,7 @@ public class SimpleQuestionsService implements QuestionsService {
     ioService.writeLine(response);
   }
 
-  private String getUsername() {
+  private String askUsername() {
     String questionName = questionsDao.getMessage(
             properties.getNameCode(),
             properties.getLocale()
@@ -66,7 +66,7 @@ public class SimpleQuestionsService implements QuestionsService {
     return ioService.readString();
   }
 
-  private int getAnswerForQuestion(Question q) {
+  private int answerToQuestion(Question q) {
     String questionAnswer = questionsDao.getMessage(
             properties.getAnswerCode(),
             properties.getLocale()
