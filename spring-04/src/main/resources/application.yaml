@@ -1,0 +1,12 @@
+spring:
+  messages:
+    basename: "i18n/appmessages"
+    encoding: "UTF-8"
+
+application:
+  quiz:
+    questions-code: "quiz.questions"
+    name-code: "quiz.name"
+    result-code: "quiz.result"
+    answer-code: "quiz.answer"
+    locale: ru
