@@ -1,8 +1,6 @@
-package ru.otus.csv.csv.mapper;
+package ru.otus.csv.mapper;
 
 import org.junit.jupiter.api.Test;
-import ru.otus.csv.mapper.QuestionMapper;
-import ru.otus.csv.mapper.StringToQuestionMapper;
 import ru.otus.csv.model.Question;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;

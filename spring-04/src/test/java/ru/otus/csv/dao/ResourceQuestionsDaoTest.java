@@ -1,4 +1,4 @@
-package ru.otus.csv.csv.dao;
+package ru.otus.csv.dao;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
-import ru.otus.csv.dao.ResourceQuestionsDao;
 import ru.otus.csv.mapper.QuestionMapper;
 import ru.otus.csv.mapper.StringToQuestionMapper;
 import ru.otus.csv.model.Question;

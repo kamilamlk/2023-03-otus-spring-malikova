@@ -1,4 +1,4 @@
-package ru.otus.csv.csv.service;
+package ru.otus.csv.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,8 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import ru.otus.csv.config.QuizProperties;
-import ru.otus.csv.service.IoService;
-import ru.otus.csv.service.SimpleQuestionsService;
 import ru.otus.csv.dao.QuestionsDao;
 import ru.otus.csv.model.Question;
 import java.util.List;
