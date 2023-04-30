@@ -1,12 +1,9 @@
 package ru.otus.csv.service;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.csv.config.QuizProperties;
 import ru.otus.csv.dao.QuestionsDao;
 import ru.otus.csv.model.Question;
@@ -19,8 +16,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+@SpringBootTest
 public class SimpleQuestionsServiceTest {
   private static final String EMPTY_STRING = "";
   private static final String QUESTIONS = "quiz.questions";
@@ -29,13 +25,14 @@ public class SimpleQuestionsServiceTest {
   private static final String ANSWER = "quiz.answer";
   private static final String USERNAME = "User";
   private static final int SELECTED_ANSWER = 0;
-  @Mock
+
+  @MockBean
   private QuestionsDao questionsDao;
-  @Mock
+  @MockBean
   private IoService ioService;
-  @Mock
+  @MockBean
   private QuizProperties properties;
-  @InjectMocks
+  @Autowired
   private SimpleQuestionsService questionsService;
 
   @Test

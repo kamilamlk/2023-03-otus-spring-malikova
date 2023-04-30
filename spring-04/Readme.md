@@ -24,9 +24,22 @@
    ```
 2. Запуск приложения
    ```
-   java -jar target/spring-03-0.0.1-SNAPSHOT-exec.jar
+   java -jar target/spring-04-0.0.1-SNAPSHOT-exec.jar
    ```
-3. Запуск с параметрами
+3. Настройка языка. Использовать команду language или l с параметром
    ```
-   java -jar target/spring-03-0.0.1-SNAPSHOT-exec.jar --application.quiz.locale=uz
+   language ru
    ```
+4. Запуск опроса возможен командой quiz или q
+   ```
+   quiz
+   ```
+5. Справка
+   ```
+   help
+   ```
+6. Завершение работы
+   ```
+   exit
+   ```
+      
