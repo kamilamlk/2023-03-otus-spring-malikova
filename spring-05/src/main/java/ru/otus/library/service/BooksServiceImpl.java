@@ -25,7 +25,7 @@ public class BooksServiceImpl implements BooksService {
   @Override
   public void showBooks() {
     List<Book> books = booksDao.getAll();
-    books.forEach(ioService::writeBook);
+    ioService.writeBooks(books);
   }
 
   @Override

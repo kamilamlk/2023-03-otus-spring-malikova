@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.library.models.Author;
 import ru.otus.library.models.Book;
 import ru.otus.library.models.Genre;
+import java.util.List;
 
 /**
  * Reads from and writes to console.
@@ -21,6 +22,11 @@ public class ConsoleIoService implements IoService {
     writeLine(String.format("   %s", book.getAuthor().getName()));
     writeLine(String.format("   %s", book.getGenre().getName()));
     writeLine(String.format("   Published on %d", book.getPublicationYear()));
+  }
+
+  @Override
+  public void writeBooks(List<Book> books) {
+    books.forEach(this::writeBook);
   }
 
   @Override
