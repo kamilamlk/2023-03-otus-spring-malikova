@@ -43,17 +43,9 @@ public class BooksServiceImplTest {
     doReturn(books).when(booksDao).getAll();
     doNothing().when(ioService).writeBook(BOOK);
     booksService.showBooks();
-    verify(ioService).writeBook(BOOK);
+    verify(ioService).writeBooks(books);
 
-    verify(ioService, times(1)).writeBook(any());
-  }
-
-  @DisplayName("Prints book in ioService")
-  @Test
-  void shouldPrintBook() {
-    doReturn(List.of(BOOK)).when(booksDao).getAll();
-    booksService.showBooks();
-    verify(ioService, times(1)).writeBook(BOOK);
+    verify(ioService, times(1)).writeBooks(any());
   }
 
   @DisplayName("Correctly builds book to insert")
