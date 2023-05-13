@@ -1,10 +1,10 @@
-package ru.otus.library.service;
+package ru.otus.library.orm.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-import ru.otus.library.models.Author;
-import ru.otus.library.models.Book;
-import ru.otus.library.models.Genre;
+import ru.otus.library.orm.models.Author;
+import ru.otus.library.orm.models.Book;
+import ru.otus.library.orm.models.Genre;
 
 /**
  * Reads from and writes to console.
