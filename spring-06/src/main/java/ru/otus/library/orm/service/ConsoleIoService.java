@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import ru.otus.library.orm.models.Author;
 import ru.otus.library.orm.models.Book;
+import ru.otus.library.orm.models.Comment;
 import ru.otus.library.orm.models.Genre;
 
 /**
@@ -37,5 +38,15 @@ public class ConsoleIoService implements IoService {
   @Override
   public void writeGenre(Genre genre) {
     writeLine(String.format("%d. %s", genre.getId(), genre.getName()));
+  }
+
+  @Override
+  public void writeComments(List<Comment> comments) {
+    comments.forEach(this::writeComment);
+  }
+
+  @Override
+  public void writeComment(Comment comment) {
+    writeLine(String.format("%d. %s", comment.getId(), comment.getCommentText()));
   }
 }

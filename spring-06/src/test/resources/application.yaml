@@ -5,6 +5,12 @@ spring:
     init:
       mode: always
       data-locations: data.sql
+      schema-locations: schema.sql
   shell:
     interactive:
       enabled: false
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true

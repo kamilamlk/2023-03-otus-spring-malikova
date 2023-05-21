@@ -1,11 +1,12 @@
 package ru.otus.library.orm.dao;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.orm.models.Author;
 
@@ -13,26 +14,33 @@ import ru.otus.library.orm.models.Author;
  * Implementation of CRUD operations with Author.
  */
 @Repository
-public class AuthorsDaoJdbc implements AuthorsDao {
-  private final NamedParameterJdbcOperations jdbcOperation;
+public class AuthorsDaoJpa implements AuthorsDao {
+  @PersistenceContext
+  private final EntityManager em;
 
-  public AuthorsDaoJdbc(NamedParameterJdbcOperations jdbcOperation) {
-    this.jdbcOperation = jdbcOperation;
+  public AuthorsDaoJpa(EntityManager em) {
+    this.em = em;
+  }
+
+  @Override
+  public Author save(Author author) {
+    if (author.getId() <= 0) {
+      em.persist(author);
+      return author;
+    } else {
+      return em.merge(author);
+    }
   }
 
   @Override
   public List<Author> getAll() {
-    return jdbcOperation.query("select id, author_name from authors", new AuthorMapper());
+    TypedQuery<Author> query = em.createQuery("select a from Author a", Author.class);
+    return query.getResultList();
   }
 
   @Override
   public Author getById(long id) {
-    Map<String, Object> params = Map.of("id", id);
-    return jdbcOperation.queryForObject(
-            "select id, author_name from authors where id = :id",
-            params,
-            new AuthorMapper()
-    );
+    return em.find(Author.class, id);
   }
 
   private static class AuthorMapper implements RowMapper<Author> {

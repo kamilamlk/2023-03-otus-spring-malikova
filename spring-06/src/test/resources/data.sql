@@ -1,7 +1,9 @@
-insert into genres (id, genre_name) values (1, 'FICTION');
-insert into genres (id, genre_name) values (2, 'NON-FICTION');
+insert into genres (genre_name) values ('FICTION');
+insert into genres (genre_name) values ('NON-FICTION');
 
-insert into authors (id, author_name) values (1, 'Stephen King');
-insert into authors (id, author_name) values (2, 'George Orwell');
+insert into authors (author_name) values ('Stephen King');
+insert into authors (author_name) values ('George Orwell');
 
-insert into books (id, title, publication_year, author_id, genre_id) values (1, 'The Shining', 1977, 1, 1);
+insert into books (title, publication_year, author_id, genre_id) values ('The Shining', 1977, 1, 1);
+
+insert into comments(comment_text, book_id) values ('comment', 1);

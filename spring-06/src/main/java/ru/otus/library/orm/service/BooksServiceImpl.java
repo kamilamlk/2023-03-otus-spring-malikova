@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.orm.config.Default;
 import ru.otus.library.orm.dao.BooksDao;
 import ru.otus.library.orm.models.Author;
 import ru.otus.library.orm.models.Book;
 import ru.otus.library.orm.models.Genre;
+
 
 /**
  * Implementation of service responsible for operations with Books.
@@ -34,16 +36,17 @@ public class BooksServiceImpl implements BooksService {
     ioService.writeBook(book);
   }
 
+  @Transactional
   @Override
   public void addBook(String title, int publicationYear, long authorId, long genreId) {
-    long id = booksDao.getNextId();
     Author author = authorsService.getAuthorById(authorId);
     Genre genre = genreService.getGenreById(genreId);
 
-    Book book = new Book(id, title, publicationYear, author, genre);
+    Book book = new Book(Default.ZERO, title, publicationYear, author, genre);
     booksDao.insert(book);
   }
 
+  @Transactional
   @Override
   public void updateBook(
           long id,

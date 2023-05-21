@@ -14,3 +14,79 @@
 4. Покрыть репозитории тестами, используя H2 базу данных и соответствующий H2 Hibernate-диалект для тестов. 
 5. Не забудьте отключить DDL через Hibernate 
 6. @Transactional рекомендуется ставить только на методы сервиса.
+
+## Сборка и запуск приложения ##
+1. Сборка приложения
+   ```
+   mvn package
+   ```
+2. Запуск приложения
+   ```
+   java -jar target/spring-06-0.0.1-SNAPSHOT-exec.jar
+   ```
+3. Отобразить все книги
+   ```
+   books
+   ```
+4. Отобразить все жанры
+   ```
+   genres
+   ```
+5. Отобразить всех авторов
+   ```
+   authors
+   ```
+6. Отобразить книгу, id - идентификатор книги
+   ```
+   book <id>
+   ```
+7. Добавить книгу, TITLE - название книги, YEAR - год публикации, AUTHOR - идентификатор автора в базе, GENRE - идентификатор жанра в базе
+   ```
+   book-add -t TITLE -y YEAR -a AUTHOR -g GENRE
+   ```
+   ```
+   book-add --title 1984 --year 1948 --author 2 --genre 2
+   ```
+8. Обновить данные о книге, TITLE - название книги, YEAR - год публикации, AUTHOR - идентификатор автора в базе, GENRE - идентификатор жанра в базе
+   ```
+   book-update id -t TITLE -y YEAR -a AUTHOR -g GENRE
+   ```
+   ```
+   book-update 2 --title 1984 --year 1949 --author 2 --genre 2
+   ```
+9. Добавить комментарий
+   ```
+   comment-add <bookId> <comment text>
+   ```
+   ```
+   comment-add 1 "Facinating"
+   ```
+10. Обновить комментарий
+   ```
+   comment-update <commentId> <comment new text>
+   ```
+   ```
+   comment-update 1 "Facinating book"
+   ```
+11. Посмотреть комментарии к книге
+   ```
+   comments <bookId>
+   ```
+   ```
+   comment 1
+   ```
+12. Удалить комментарий
+   ```
+   comment-delete <commentId>
+   ```
+   ```
+   comment-delete 1
+   ```
+13. Справка
+   ```
+   help
+   ```
+14. Завершение работы
+   ```
+   exit
+   ```

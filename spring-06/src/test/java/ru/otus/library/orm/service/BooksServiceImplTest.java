@@ -22,7 +22,7 @@ public class BooksServiceImplTest {
   private final String TITLE = "Test book";
   private final Author AUTHOR = new Author(1L, "Test Author");
   private final Genre GENRE = new Genre(1L, "Test Genre");
-  private final Book BOOK = new Book(1L, TITLE, 2000, AUTHOR, GENRE);
+  private final Book BOOK = new Book(0L, TITLE, 2000, AUTHOR, GENRE);
 
   @MockBean
   private BooksDao booksDao;
@@ -51,7 +51,6 @@ public class BooksServiceImplTest {
   @DisplayName("Correctly builds book to insert")
   @Test
   void shouldCorrectlyAddBook() {
-    doReturn(BOOK.getId()).when(booksDao).getNextId();
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
 

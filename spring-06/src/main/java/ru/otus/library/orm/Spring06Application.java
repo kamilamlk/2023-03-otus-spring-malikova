@@ -11,5 +11,4 @@ public class Spring06Application {
   public static void main(String[] args) {
     SpringApplication.run(Spring06Application.class, args);
   }
-
 }

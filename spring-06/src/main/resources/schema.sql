@@ -1,17 +1,28 @@
-create table authors(
-    id bigint primary key,
-    author_name varchar(255)
+create table authors (
+      id bigserial,
+      author_name varchar(255),
+      primary key (id)
 );
 
-create table genres(
-    id bigint primary key,
-    genre_name varchar(255)
+
+create table genres (
+      id bigserial,
+      genre_name varchar(255),
+      primary key (id)
 );
 
 create table books(
-    id bigint primary key auto_increment,
+    id bigserial,
     title varchar(255),
     publication_year integer,
-    author_id integer references authors(id),
-    genre_id integer references genres(id)
+    author_id bigint references authors(id),
+    genre_id bigint references genres(id),
+    primary key (id)
+);
+
+create table comments (
+    id bigserial,
+    comment_text varchar(255),
+    book_id bigint references books(id) on delete cascade,
+    primary key (id)
 );
