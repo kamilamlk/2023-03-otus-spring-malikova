@@ -7,7 +7,7 @@ import ru.otus.library.orm.models.Book;
  * CRUD operations with Books.
  */
 public interface BooksDao {
-  Book insert(Book book);
+  Book save(Book book);
 
   Book getById(long id);
 

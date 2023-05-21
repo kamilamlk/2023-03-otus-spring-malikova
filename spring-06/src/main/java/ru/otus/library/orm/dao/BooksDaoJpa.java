@@ -21,7 +21,7 @@ public class BooksDaoJpa implements BooksDao {
   }
 
   @Override
-  public Book insert(Book book) {
+  public Book save(Book book) {
     entityManager.persist(book);
     return book;
   }

@@ -56,7 +56,7 @@ public class BooksServiceImplTest {
 
     booksService.addBook(BOOK.getTitle(), BOOK.getPublicationYear(), AUTHOR.getId(), GENRE.getId());
 
-    verify(booksDao).insert(BOOK);
+    verify(booksDao).save(BOOK);
   }
 
   @DisplayName("Updates book's title")

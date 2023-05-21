@@ -43,7 +43,7 @@ public class BooksServiceImpl implements BooksService {
     Genre genre = genreService.getGenreById(genreId);
 
     Book book = new Book(Default.ZERO, title, publicationYear, author, genre);
-    booksDao.insert(book);
+    booksDao.save(book);
   }
 
   @Transactional

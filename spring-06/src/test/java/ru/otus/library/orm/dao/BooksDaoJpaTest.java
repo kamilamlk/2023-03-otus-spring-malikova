@@ -36,7 +36,7 @@ public class BooksDaoJpaTest {
             new Genre(0L, "Fairytale")
     );
 
-    booksDao.insert(book).getId();
+    booksDao.save(book).getId();
     em.detach(book);
     Book resultingBook = em.find(Book.class, book.getId());
 
