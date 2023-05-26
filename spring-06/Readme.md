@@ -73,7 +73,7 @@
    comments <bookId>
    ```
    ```
-   comment 1
+   comments 1
    ```
 12. Удалить комментарий
    ```

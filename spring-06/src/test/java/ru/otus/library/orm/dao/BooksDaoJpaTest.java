@@ -33,10 +33,11 @@ public class BooksDaoJpaTest {
             "Carrie",
             1974,
             new Author(0L, "King"),
-            new Genre(0L, "Fairytale")
+            new Genre(0L, "Fairytale"),
+            List.of()
     );
 
-    booksDao.save(book).getId();
+    booksDao.save(book);
     em.detach(book);
     Book resultingBook = em.find(Book.class, book.getId());
 
@@ -76,16 +77,15 @@ public class BooksDaoJpaTest {
   @Test
   void shouldDeleteById() {
     Book book = em.find(Book.class, EXISTING_BOOK_ID);
-    em.detach(book);
-    booksDao.deleteById(EXISTING_BOOK_ID);
+    booksDao.delete(book);
     assertThat(booksDao.getById(EXISTING_BOOK_ID)).isNull();
   }
 
   @DisplayName("Returns list of one book")
   @Test
   void shouldReturnBooksList() {
-    try(SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
-                                                .unwrap(SessionFactory.class)) {
+    SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
+                                                .unwrap(SessionFactory.class);
       sessionFactory.getStatistics().setStatisticsEnabled(true);
 
       List<Book> books = booksDao.getAll();
@@ -99,6 +99,5 @@ public class BooksDaoJpaTest {
       ;
 
       assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(1);
-    }
   }
 }

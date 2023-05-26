@@ -12,4 +12,8 @@ public interface GenresDao {
   List<Genre> getAll();
 
   Genre getById(long id);
+
+  void update(Genre genre);
+
+  void delete(Genre genre);
 }

@@ -48,4 +48,25 @@ public class GenresDaoJpaTest {
 
     assertThat(genre).isEqualTo(expected);
   }
+
+  @DisplayName("Should update name")
+  @Test
+  void shouldUpdateGenre() {
+    Genre genre = genreDao.getById(ID);
+    String oldName = genre.getName();
+    genre.setName("New name");
+    em.detach(genre);
+    genreDao.update(genre);
+
+    Genre resultingGenre = genreDao.getById(ID);
+    assertThat(resultingGenre.getName()).isNotEqualTo(oldName);
+  }
+
+  @DisplayName("Should delete")
+  @Test
+  void shouldDeleteGenre() {
+    Genre genre = genreDao.getById(ID);
+    genreDao.delete(genre);
+    assertThat(genreDao.getById(ID)).isNull();
+  }
 }

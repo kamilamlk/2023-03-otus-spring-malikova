@@ -1,6 +1,5 @@
 package ru.otus.library.orm.dao;
 
-import java.util.List;
 import ru.otus.library.orm.models.Comment;
 
 /**
@@ -11,9 +10,7 @@ public interface CommentsDao {
 
   Comment getById(long id);
 
-  List<Comment> findByBookId(long bookId);
-
   void update(Comment comment);
 
-  void deleteById(long id);
+  void delete(Comment comment);
 }

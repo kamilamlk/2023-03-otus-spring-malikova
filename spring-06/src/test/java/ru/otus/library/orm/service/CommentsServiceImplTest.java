@@ -24,7 +24,9 @@ public class CommentsServiceImplTest {
   private final String TITLE = "Test book";
   private final Author AUTHOR = new Author(1L, "Test Author");
   private final Genre GENRE = new Genre(1L, "Test Genre");
-  private final Book BOOK = new Book(1L, TITLE, 2000, AUTHOR, GENRE);
+  private final Book BOOK = new Book(
+          1L, TITLE, 2000, AUTHOR,
+          GENRE, List.of());
   private final Comment COMMENT = new Comment(0L, COMMENT_TEXT, BOOK);
 
   @MockBean
@@ -50,16 +52,18 @@ public class CommentsServiceImplTest {
   @Test
   void shouldShowComments() {
     List<Comment> comments = List.of(COMMENT);
-    doReturn(comments).when(commentsDao).findByBookId(anyLong());
-    commentsService.showBookComments(BOOK.getId());
+    Book book = new Book(1L, TITLE, 2000, AUTHOR, GENRE, comments);
+    doReturn(book).when(booksDao).getById(anyLong());
+    commentsService.showBookComments(book.getId());
     verify(ioService, times(1)).writeComments(comments);
   }
 
   @DisplayName("Checks that comment is deleted")
   @Test
   void shouldDeleteComment() {
+    doReturn(COMMENT).when(commentsDao).getById(anyLong());
     commentsService.deleteComment(COMMENT.getId());
-    verify(commentsDao, times(1)).deleteById(COMMENT.getId());
+    verify(commentsDao, times(1)).delete(COMMENT);
   }
 
   @DisplayName("Checks that comment is updated")

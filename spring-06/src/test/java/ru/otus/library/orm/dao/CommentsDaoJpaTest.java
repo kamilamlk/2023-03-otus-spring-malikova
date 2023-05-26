@@ -23,7 +23,8 @@ public class CommentsDaoJpaTest {
           "The Shining",
           1977,
           new Author(1L, "Stephen King"),
-          new Genre(1L, "FICTION")
+          new Genre(1L, "FICTION"),
+          List.of()
   );
   @Autowired
   private CommentsDaoJpa commentsDaoJpa;
@@ -72,18 +73,10 @@ public class CommentsDaoJpaTest {
   @Test
   void shouldDeleteById() {
     Comment comment = em.find(Comment.class, EXCISTING_ID);
-    em.detach(comment);
-    commentsDaoJpa.deleteById(EXCISTING_ID);
-    assertThat(commentsDaoJpa.getById(EXCISTING_ID)).isNull();
-  }
+    Book book = comment.getBook();
+    commentsDaoJpa.delete(comment);
 
-  @DisplayName("Returns list of comments")
-  @Test
-  void shouldReturnCommentsList() {
-    Comment existingComment = em.find(Comment.class, EXCISTING_ID);
-    em.detach(existingComment);
-    List<Comment> comments = commentsDaoJpa.findByBookId(EXCISTING_ID);
-    assertThat(comments).hasSize(1)
-            .containsExactlyInAnyOrder(existingComment);
+    assertThat(commentsDaoJpa.getById(EXCISTING_ID)).isNull();
+    assertThat(em.find(Book.class, book.getId())).isNotNull();
   }
 }

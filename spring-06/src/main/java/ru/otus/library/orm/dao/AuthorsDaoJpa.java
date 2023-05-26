@@ -3,10 +3,7 @@ package ru.otus.library.orm.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.orm.models.Author;
 
@@ -43,12 +40,13 @@ public class AuthorsDaoJpa implements AuthorsDao {
     return em.find(Author.class, id);
   }
 
-  private static class AuthorMapper implements RowMapper<Author> {
-    @Override
-    public Author mapRow(ResultSet rs, int rowNum) throws SQLException {
-      long id = rs.getLong("id");
-      String name = rs.getString("author_name");
-      return new Author(id, name);
-    }
+  @Override
+  public void update(Author author) {
+    em.merge(author);
+  }
+
+  @Override
+  public void delete(Author author) {
+    em.remove(author);
   }
 }

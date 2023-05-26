@@ -1,6 +1,5 @@
 package ru.otus.library.orm.service;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,14 +34,15 @@ public class CommentsServiceImpl implements CommentsService {
 
   @Override
   public void showBookComments(long bookId) {
-    List<Comment> comments = commentsDao.findByBookId(bookId);
-    ioService.writeComments(comments);
+    Book book = booksDao.getById(bookId);
+    ioService.writeComments(book.getComments());
   }
 
   @Transactional
   @Override
   public void deleteComment(long commentId) {
-    commentsDao.deleteById(commentId);
+    Comment comment = commentsDao.getById(commentId);
+    commentsDao.delete(comment);
   }
 
   @Transactional

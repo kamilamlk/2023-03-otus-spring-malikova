@@ -39,4 +39,14 @@ public class GenresDaoJpa implements GenresDao {
   public Genre getById(long id) {
     return em.find(Genre.class, id);
   }
+
+  @Override
+  public void update(Genre genre) {
+    em.merge(genre);
+  }
+
+  @Override
+  public void delete(Genre genre) {
+    em.remove(genre);
+  }
 }

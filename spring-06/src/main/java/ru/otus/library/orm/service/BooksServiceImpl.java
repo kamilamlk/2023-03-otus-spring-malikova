@@ -42,7 +42,7 @@ public class BooksServiceImpl implements BooksService {
     Author author = authorsService.getAuthorById(authorId);
     Genre genre = genreService.getGenreById(genreId);
 
-    Book book = new Book(Default.ZERO, title, publicationYear, author, genre);
+    Book book = new Book(Default.ZERO, title, publicationYear, author, genre, List.of());
     booksDao.save(book);
   }
 
@@ -56,8 +56,8 @@ public class BooksServiceImpl implements BooksService {
           long genreId
   ) {
     Book book = booksDao.getById(id);
+    Book.BookBuilder builder = book.getBuilder();
 
-    BookBuilder builder = new BookBuilder(book);
     if (!Objects.equals(title, Default.NONE)) {
       builder.title(title);
     }
@@ -78,45 +78,5 @@ public class BooksServiceImpl implements BooksService {
 
     Book resultingBook = builder.build();
     booksDao.update(resultingBook);
-  }
-
-  private static class BookBuilder {
-    private final Long id;
-    private String title;
-    private int publicationYear;
-    private Author author;
-    private Genre genre;
-
-    BookBuilder(Book book) {
-      id = book.getId();
-      title = book.getTitle();
-      publicationYear = book.getPublicationYear();
-      author = book.getAuthor();
-      genre = book.getGenre();
-    }
-
-    BookBuilder title(String title) {
-      this.title = title;
-      return this;
-    }
-
-    BookBuilder publicationYear(int publicationYear) {
-      this.publicationYear = publicationYear;
-      return this;
-    }
-
-    BookBuilder author(Author author) {
-      this.author = author;
-      return this;
-    }
-
-    BookBuilder genre(Genre genre) {
-      this.genre = genre;
-      return this;
-    }
-
-    Book build() {
-      return new Book(id, title, publicationYear, author, genre);
-    }
   }
 }

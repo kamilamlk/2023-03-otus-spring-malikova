@@ -49,4 +49,25 @@ public class AuthorsDaoJpaTest {
 
     Assertions.assertEquals(expectedAuthor, author);
   }
+
+  @DisplayName("Should update name")
+  @Test
+  void shouldUpdateAuthor() {
+    Author author = authorsDao.getById(ID);
+    String oldName = author.getName();
+    author.setName("New name");
+    em.detach(author);
+    authorsDao.update(author);
+
+    Author resultingAuthor = authorsDao.getById(ID);
+    assertThat(resultingAuthor.getName()).isNotEqualTo(oldName);
+  }
+
+  @DisplayName("Should delete")
+  @Test
+  void shouldDeleteAuthor() {
+    Author author = authorsDao.getById(ID);
+    authorsDao.delete(author);
+    assertThat(authorsDao.getById(ID)).isNull();
+  }
 }

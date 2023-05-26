@@ -2,9 +2,6 @@ package ru.otus.library.orm.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
-import java.util.List;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.orm.models.Comment;
 
@@ -37,24 +34,12 @@ public class CommentsDaoJpa implements CommentsDao {
   }
 
   @Override
-  public List<Comment> findByBookId(long bookId) {
-    TypedQuery<Comment> query = em.createQuery(
-            "select distinct c from Comment c join fetch c.book where c.book.id = :book_id",
-            Comment.class
-    );
-    query.setParameter("book_id", bookId);
-    return query.getResultList();
-  }
-
-  @Override
   public void update(Comment comment) {
     em.merge(comment);
   }
 
   @Override
-  public void deleteById(long id) {
-    Query query = em.createQuery("delete from Comment c where c.id = :id ");
-    query.setParameter("id", id);
-    query.executeUpdate();
+  public void delete(Comment comment) {
+    em.remove(comment);
   }
 }

@@ -1,10 +1,12 @@
 package ru.otus.library.orm.dao;
 
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.orm.models.Book;
 
@@ -28,7 +30,10 @@ public class BooksDaoJpa implements BooksDao {
 
   @Override
   public Book getById(long id) {
-    return entityManager.find(Book.class, id);
+    EntityGraph<?> entityGraph = entityManager.getEntityGraph("book-comments-entity-graph");
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("javax.persistence.fetchgraph", entityGraph);
+    return entityManager.find(Book.class, id, properties);
   }
 
   @Override
@@ -37,10 +42,8 @@ public class BooksDaoJpa implements BooksDao {
   }
 
   @Override
-  public void deleteById(long id) {
-    Query query = entityManager.createQuery("delete from Book b where b.id = :id ");
-    query.setParameter("id", id);
-    query.executeUpdate();
+  public void delete(Book book) {
+    entityManager.remove(book);
   }
 
   @Override
