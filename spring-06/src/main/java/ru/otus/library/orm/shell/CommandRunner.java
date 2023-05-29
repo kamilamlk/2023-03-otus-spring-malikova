@@ -49,7 +49,7 @@ public class CommandRunner {
 
   @ShellMethod(value = "Show books command", key = {"book"})
   public void showBook(@ShellOption long bookId) {
-    Book book = booksService.findBook(bookId);
+    Book book = booksService.getBook(bookId);
     ioService.writeBook(book);
   }
 

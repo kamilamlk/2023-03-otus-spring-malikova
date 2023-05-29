@@ -10,7 +10,7 @@ import ru.otus.library.orm.models.Book;
 public interface BooksService {
   List<Book> findBooks();
 
-  Book findBook(long bookId);
+  Book getBook(long bookId);
 
   void addBook(String title, int publicationYear, long authorId, long genreId);
 
