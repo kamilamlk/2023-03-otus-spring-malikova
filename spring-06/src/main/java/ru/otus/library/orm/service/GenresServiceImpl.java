@@ -13,12 +13,10 @@ import ru.otus.library.orm.models.Genre;
 @AllArgsConstructor
 public class GenresServiceImpl implements GenresService {
   private final GenresDao genresDao;
-  private final IoService ioService;
 
   @Override
-  public void showGenres() {
-    List<Genre> genres = genresDao.getAll();
-    genres.forEach(ioService::writeGenre);
+  public List<Genre> findGenres() {
+    return genresDao.getAll();
   }
 
   @Override

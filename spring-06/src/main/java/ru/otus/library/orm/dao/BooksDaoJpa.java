@@ -30,7 +30,12 @@ public class BooksDaoJpa implements BooksDao {
 
   @Override
   public Book getById(long id) {
-    EntityGraph<?> entityGraph = entityManager.getEntityGraph("book-comments-entity-graph");
+    return entityManager.find(Book.class, id);
+  }
+
+  @Override
+  public Book getByIdEagerly(long id, String graph) {
+    EntityGraph<?> entityGraph = entityManager.getEntityGraph(graph);
     Map<String, Object> properties = new HashMap<>();
     properties.put("javax.persistence.fetchgraph", entityGraph);
     return entityManager.find(Book.class, id, properties);

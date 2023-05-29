@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.orm.config.Default;
 import ru.otus.library.orm.dao.BooksDao;
+import ru.otus.library.orm.exception.NotFoundException;
 import ru.otus.library.orm.models.Author;
 import ru.otus.library.orm.models.Book;
 import ru.otus.library.orm.models.Genre;
@@ -22,18 +23,15 @@ public class BooksServiceImpl implements BooksService {
 
   private final AuthorsService authorsService;
   private final GenresService genreService;
-  private final IoService ioService;
 
   @Override
-  public void showBooks() {
-    List<Book> books = booksDao.getAll();
-    ioService.writeBooks(books);
+  public List<Book> findBooks() {
+    return booksDao.getAll();
   }
 
   @Override
-  public void showBook(long bookId) {
-    Book book = booksDao.getById(bookId);
-    ioService.writeBook(book);
+  public Book findBook(long bookId) {
+    return booksDao.getById(bookId);
   }
 
   @Transactional
@@ -54,8 +52,11 @@ public class BooksServiceImpl implements BooksService {
           int publicationYear,
           long authorId,
           long genreId
-  ) {
+  ) throws NotFoundException {
     Book book = booksDao.getById(id);
+    if (book == null) {
+      throw new NotFoundException("No book found");
+    }
     Book.BookBuilder builder = book.getBuilder();
 
     if (!Objects.equals(title, Default.NONE)) {

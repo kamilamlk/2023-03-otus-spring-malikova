@@ -1,12 +1,16 @@
 package ru.otus.library.orm.service;
 
+import java.util.List;
+import ru.otus.library.orm.exception.NotFoundException;
+import ru.otus.library.orm.models.Book;
+
 /**
  * Service responsible for operations with Books.
  */
 public interface BooksService {
-  void showBooks();
+  List<Book> findBooks();
 
-  void showBook(long bookId);
+  Book findBook(long bookId);
 
   void addBook(String title, int publicationYear, long authorId, long genreId);
 
@@ -16,5 +20,5 @@ public interface BooksService {
           int publicationYear,
           long authorId,
           long genreId
-  );
+  ) throws NotFoundException;
 }

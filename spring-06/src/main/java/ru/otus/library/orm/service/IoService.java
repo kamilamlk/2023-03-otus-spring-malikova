@@ -18,7 +18,11 @@ public interface IoService {
 
   void writeAuthor(Author author);
 
+  void writeAuthors(List<Author> authors);
+
   void writeGenre(Genre genre);
+
+  void writeGenres(List<Genre> genres);
 
   void writeComments(List<Comment> comments);
 

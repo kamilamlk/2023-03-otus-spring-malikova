@@ -11,6 +11,8 @@ public interface BooksDao {
 
   Book getById(long id);
 
+  Book getByIdEagerly(long id, String graph);
+
   void update(Book book);
 
   void delete(Book id);

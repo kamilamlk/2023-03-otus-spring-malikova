@@ -7,14 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.library.orm.config.Default;
 import ru.otus.library.orm.dao.BooksDao;
+import ru.otus.library.orm.exception.NotFoundException;
 import ru.otus.library.orm.models.Author;
 import ru.otus.library.orm.models.Book;
 import ru.otus.library.orm.models.Genre;
 import java.util.List;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = BooksServiceImpl.class)
@@ -30,8 +29,6 @@ public class BooksServiceImplTest {
   private AuthorsService authorsService;
   @MockBean
   private GenresService genresService;
-  @MockBean
-  private IoService ioService;
 
   @Autowired
   private BooksServiceImpl booksService;
@@ -41,11 +38,9 @@ public class BooksServiceImplTest {
   void shouldPrintBooks() {
     List<Book> books = List.of(BOOK);
     doReturn(books).when(booksDao).getAll();
-    doNothing().when(ioService).writeBook(BOOK);
-    booksService.showBooks();
-    verify(ioService).writeBooks(books);
 
-    verify(ioService, times(1)).writeBooks(any());
+    List<Book> result = booksService.findBooks();
+    assertThat(result).containsExactlyInAnyOrderElementsOf(books);
   }
 
   @DisplayName("Correctly builds book to insert")
@@ -61,7 +56,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's title")
   @Test
-  void shouldUpdateTitle() {
+  void shouldUpdateTitle() throws NotFoundException {
     String newTitle = "New Title";
     Book expectedBook = new Book(BOOK.getId(), newTitle, BOOK.getPublicationYear(), AUTHOR, GENRE, List.of());
 
@@ -75,7 +70,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's publication year")
   @Test
-  void shouldUpdatePublicationYear() {
+  void shouldUpdatePublicationYear() throws NotFoundException {
     int newYear = 2005;
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), newYear, AUTHOR, GENRE, List.of());
 
@@ -89,7 +84,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's author")
   @Test
-  void shouldUpdateAuthor() {
+  void shouldUpdateAuthor() throws NotFoundException {
     Author newAuthor = new Author(3L, "New Author");
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), BOOK.getPublicationYear(), newAuthor, GENRE, List.of());
 
@@ -103,7 +98,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's genre")
   @Test
-  void shouldUpdateGenre() {
+  void shouldUpdateGenre() throws NotFoundException {
     Genre newGenre = new Genre(3L, "New Genre");
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), BOOK.getPublicationYear(), AUTHOR, newGenre, List.of());
 
@@ -117,7 +112,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's all information")
   @Test
-  void shouldUpdateAllParams() {
+  void shouldUpdateAllParams() throws NotFoundException {
     String newTitle = "New Title";
     int newYear = 2005;
     Author newAuthor = new Author(3L, "New Author");

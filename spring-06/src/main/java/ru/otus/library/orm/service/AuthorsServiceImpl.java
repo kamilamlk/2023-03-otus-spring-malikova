@@ -13,12 +13,10 @@ import ru.otus.library.orm.models.Author;
 @AllArgsConstructor
 public class AuthorsServiceImpl implements AuthorsService {
   private final AuthorsDao authorsDao;
-  private final IoService ioService;
 
   @Override
-  public void showAuthors() {
-    List<Author> authors = authorsDao.getAll();
-    authors.forEach(ioService::writeAuthor);
+  public List<Author> findAuthors() {
+    return authorsDao.getAll();
   }
 
   @Override

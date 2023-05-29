@@ -1,14 +1,21 @@
 package ru.otus.library.orm.shell;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.library.orm.config.Default;
+import ru.otus.library.orm.exception.NotFoundException;
+import ru.otus.library.orm.models.Author;
+import ru.otus.library.orm.models.Book;
+import ru.otus.library.orm.models.Comment;
+import ru.otus.library.orm.models.Genre;
 import ru.otus.library.orm.service.AuthorsService;
 import ru.otus.library.orm.service.BooksService;
 import ru.otus.library.orm.service.CommentsService;
 import ru.otus.library.orm.service.GenresService;
+import ru.otus.library.orm.service.IoService;
 
 /**
  * Shell command line runner.
@@ -20,25 +27,30 @@ public class CommandRunner {
   private final AuthorsService authorsService;
   private final GenresService genreService;
   private final CommentsService commentsService;
+  private final IoService ioService;
 
   @ShellMethod(value = "Show books command", key = "books")
   public void showBooks() {
-    booksService.showBooks();
+    List<Book> books = booksService.findBooks();
+    ioService.writeBooks(books);
   }
 
   @ShellMethod(value = "Show authors command", key = "authors")
   public void showAuthors() {
-    authorsService.showAuthors();
+    List<Author> authors = authorsService.findAuthors();
+    ioService.writeAuthors(authors);
   }
 
   @ShellMethod(value = "Show genres command", key = "genres")
   public void showGenres() {
-    genreService.showGenres();
+    List<Genre> genres = genreService.findGenres();
+    ioService.writeGenres(genres);
   }
 
   @ShellMethod(value = "Show books command", key = {"book"})
   public void showBook(@ShellOption long bookId) {
-    booksService.showBook(bookId);
+    Book book = booksService.findBook(bookId);
+    ioService.writeBook(book);
   }
 
   @ShellMethod(value = "Add book command", key = {"book-add"})
@@ -61,13 +73,17 @@ public class CommandRunner {
           @ShellOption(value = {"-a", "--author"}, defaultValue = Default.ZERO_STRING) long authorId,
           @ShellOption(value = {"-g", "--genre"}, defaultValue = Default.ZERO_STRING) long genreId
   ) {
-    booksService.updateBook(
-            bookId,
-            title,
-            year,
-            authorId,
-            genreId
-    );
+    try {
+      booksService.updateBook(
+              bookId,
+              title,
+              year,
+              authorId,
+              genreId
+      );
+    } catch (NotFoundException e) {
+      ioService.writeLine(e.getMessage());
+    }
   }
 
   /**
@@ -75,7 +91,11 @@ public class CommandRunner {
    */
   @ShellMethod(value = "Adds book comment", key = {"comment-add"})
   public void addComment(@ShellOption long bookId, @ShellOption String comment) {
-    commentsService.addComment(bookId, comment);
+    try {
+      commentsService.addComment(bookId, comment);
+    } catch (NotFoundException e) {
+      ioService.writeLine(e.getMessage());
+    }
   }
 
   /**
@@ -83,7 +103,8 @@ public class CommandRunner {
    */
   @ShellMethod(value = "Shows book comments", key = {"comments"})
   public void showBookComments(@ShellOption long bookId) {
-    commentsService.showBookComments(bookId);
+    List<Comment> comments = commentsService.getBookComments(bookId);
+    ioService.writeComments(comments);
   }
 
   /**
@@ -91,7 +112,11 @@ public class CommandRunner {
    */
   @ShellMethod(value = "Updates book comments", key = {"comment-update"})
   public void updateComment(@ShellOption long commentId, @ShellOption String commentText) {
-    commentsService.updateComment(commentId, commentText);
+    try {
+      commentsService.updateComment(commentId, commentText);
+    } catch (NotFoundException e) {
+      ioService.writeLine(e.getMessage());
+    }
   }
 
   /**
@@ -99,7 +124,11 @@ public class CommandRunner {
    */
   @ShellMethod(value = "Deleted book comments", key = {"comment-delete"})
   public void deleteComment(@ShellOption long commentId) {
-    commentsService.deleteComment(commentId);
+    try {
+      commentsService.deleteComment(commentId);
+    } catch (NotFoundException e) {
+      ioService.writeLine(e.getMessage());
+    }
   }
 
 }

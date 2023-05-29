@@ -7,13 +7,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.library.orm.dao.BooksDao;
 import ru.otus.library.orm.dao.CommentsDao;
+import ru.otus.library.orm.exception.NotFoundException;
 import ru.otus.library.orm.models.Author;
 import ru.otus.library.orm.models.Book;
 import ru.otus.library.orm.models.Comment;
 import ru.otus.library.orm.models.Genre;
 import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -33,15 +36,13 @@ public class CommentsServiceImplTest {
   private CommentsDao commentsDao;
   @MockBean
   private BooksDao booksDao;
-  @MockBean
-  private IoService ioService;
 
   @Autowired
   private CommentsServiceImpl commentsService;
 
   @DisplayName("Checks that comment is added")
   @Test
-  void shouldAddComment() {
+  void shouldAddComment() throws NotFoundException {
     doReturn(BOOK).when(booksDao).getById(anyLong());
     doReturn(COMMENT).when(commentsDao).save(any());
     commentsService.addComment(BOOK.getId(), COMMENT_TEXT);
@@ -53,14 +54,14 @@ public class CommentsServiceImplTest {
   void shouldShowComments() {
     List<Comment> comments = List.of(COMMENT);
     Book book = new Book(1L, TITLE, 2000, AUTHOR, GENRE, comments);
-    doReturn(book).when(booksDao).getById(anyLong());
-    commentsService.showBookComments(book.getId());
-    verify(ioService, times(1)).writeComments(comments);
+    doReturn(book).when(booksDao).getByIdEagerly(anyLong(), anyString());
+    List<Comment> result = commentsService.getBookComments(book.getId());
+    assertThat(result).containsExactlyInAnyOrderElementsOf(comments);
   }
 
   @DisplayName("Checks that comment is deleted")
   @Test
-  void shouldDeleteComment() {
+  void shouldDeleteComment() throws NotFoundException {
     doReturn(COMMENT).when(commentsDao).getById(anyLong());
     commentsService.deleteComment(COMMENT.getId());
     verify(commentsDao, times(1)).delete(COMMENT);
@@ -68,7 +69,7 @@ public class CommentsServiceImplTest {
 
   @DisplayName("Checks that comment is updated")
   @Test
-  void shouldUpdateComment() {
+  void shouldUpdateComment() throws NotFoundException {
     String commentText = "Updated test";
     Comment expectedComment = new Comment(COMMENT.getId(), commentText, BOOK);
     doReturn(COMMENT).when(commentsDao).getById(anyLong());

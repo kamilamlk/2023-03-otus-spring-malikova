@@ -36,8 +36,18 @@ public class ConsoleIoService implements IoService {
   }
 
   @Override
+  public void writeAuthors(List<Author> authors) {
+    authors.forEach(this::writeAuthor);
+  }
+
+  @Override
   public void writeGenre(Genre genre) {
     writeLine(String.format("%d. %s", genre.getId(), genre.getName()));
+  }
+
+  @Override
+  public void writeGenres(List<Genre> genres) {
+    genres.forEach(this::writeGenre);
   }
 
   @Override
