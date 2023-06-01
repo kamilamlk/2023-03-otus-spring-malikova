@@ -1,5 +1,6 @@
 package ru.otus.library.orm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,6 @@ import ru.otus.library.orm.models.Comment;
 @Service
 @AllArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
-  private static final String BOOKS_COMMENTS_GRAPH = "book-comments-entity-graph";
-
   private final CommentsDao commentsDao;
   private final BooksDao booksDao;
 
@@ -34,9 +33,15 @@ public class CommentsServiceImpl implements CommentsService {
     }
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<Comment> getBookComments(long bookId) {
-    return booksDao.getByIdEagerly(bookId, BOOKS_COMMENTS_GRAPH).getComments();
+    Book book = booksDao.getById(bookId);
+    // second option
+    // List<Comment> comments = book.getComments();
+    // Hibernate.initialize(comments);
+    List<Comment> comments = new ArrayList<>(book.getComments());
+    return comments;
   }
 
   @Transactional
