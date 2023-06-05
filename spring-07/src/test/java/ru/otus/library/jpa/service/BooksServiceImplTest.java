@@ -12,6 +12,7 @@ import ru.otus.library.jpa.models.Author;
 import ru.otus.library.jpa.models.Book;
 import ru.otus.library.jpa.models.Genre;
 import java.util.List;
+import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -37,7 +38,7 @@ public class BooksServiceImplTest {
   @Test
   void shouldPrintBooks() {
     List<Book> books = List.of(BOOK);
-    doReturn(books).when(booksDao).getAll();
+    doReturn(books).when(booksDao).findAll();
 
     List<Book> result = booksService.findBooks();
     assertThat(result).containsExactlyInAnyOrderElementsOf(books);
@@ -45,7 +46,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Correctly builds book to insert")
   @Test
-  void shouldCorrectlyAddBook() {
+  void shouldCorrectlyAddBook() throws NotFoundException {
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
 
@@ -60,12 +61,12 @@ public class BooksServiceImplTest {
     String newTitle = "New Title";
     Book expectedBook = new Book(BOOK.getId(), newTitle, BOOK.getPublicationYear(), AUTHOR, GENRE, List.of());
 
-    doReturn(BOOK).when(booksDao).getById(BOOK.getId());
+    doReturn(Optional.of(BOOK)).when(booksDao).findById(BOOK.getId());
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
 
     booksService.updateBook(BOOK.getId(), newTitle, 0, Default.ZERO, Default.ZERO);
-    verify(booksDao).update(expectedBook);
+    verify(booksDao).save(expectedBook);
   }
 
   @DisplayName("Updates book's publication year")
@@ -74,12 +75,12 @@ public class BooksServiceImplTest {
     int newYear = 2005;
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), newYear, AUTHOR, GENRE, List.of());
 
-    doReturn(BOOK).when(booksDao).getById(BOOK.getId());
+    doReturn(Optional.of(BOOK)).when(booksDao).findById(BOOK.getId());
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
 
     booksService.updateBook(BOOK.getId(), Default.NONE, newYear, Default.ZERO, Default.ZERO);
-    verify(booksDao).update(expectedBook);
+    verify(booksDao).save(expectedBook);
   }
 
   @DisplayName("Updates book's author")
@@ -88,12 +89,12 @@ public class BooksServiceImplTest {
     Author newAuthor = new Author(3L, "New Author");
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), BOOK.getPublicationYear(), newAuthor, GENRE, List.of());
 
-    doReturn(BOOK).when(booksDao).getById(BOOK.getId());
+    doReturn(Optional.of(BOOK)).when(booksDao).findById(BOOK.getId());
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
     doReturn(newAuthor).when(authorsService).getAuthorById(newAuthor.getId());
 
     booksService.updateBook(BOOK.getId(), Default.NONE, Default.ZERO, newAuthor.getId(), Default.ZERO);
-    verify(booksDao).update(expectedBook);
+    verify(booksDao).save(expectedBook);
   }
 
   @DisplayName("Updates book's genre")
@@ -102,12 +103,12 @@ public class BooksServiceImplTest {
     Genre newGenre = new Genre(3L, "New Genre");
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), BOOK.getPublicationYear(), AUTHOR, newGenre, List.of());
 
-    doReturn(BOOK).when(booksDao).getById(BOOK.getId());
+    doReturn(Optional.of(BOOK)).when(booksDao).findById(BOOK.getId());
     doReturn(newGenre).when(genresService).getGenreById(newGenre.getId());
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
 
     booksService.updateBook(BOOK.getId(), Default.NONE, Default.ZERO, Default.ZERO, newGenre.getId());
-    verify(booksDao).update(expectedBook);
+    verify(booksDao).save(expectedBook);
   }
 
   @DisplayName("Updates book's all infjpaation")
@@ -120,11 +121,11 @@ public class BooksServiceImplTest {
 
     Book expectedBook = new Book(BOOK.getId(), newTitle, newYear, newAuthor, newGenre, List.of());
 
-    doReturn(BOOK).when(booksDao).getById(BOOK.getId());
+    doReturn(Optional.of(BOOK)).when(booksDao).findById(BOOK.getId());
     doReturn(newGenre).when(genresService).getGenreById(newGenre.getId());
     doReturn(newAuthor).when(authorsService).getAuthorById(newAuthor.getId());
 
     booksService.updateBook(BOOK.getId(), newTitle, newYear, newAuthor.getId(), newGenre.getId());
-    verify(booksDao).update(expectedBook);
+    verify(booksDao).save(expectedBook);
   }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.library.jpa.dao.GenresDao;
+import ru.otus.library.jpa.exception.NotFoundException;
 import ru.otus.library.jpa.models.Genre;
 
 /**
@@ -16,11 +17,12 @@ public class GenresServiceImpl implements GenresService {
 
   @Override
   public List<Genre> findGenres() {
-    return genresDao.getAll();
+    return genresDao.findAll();
   }
 
   @Override
-  public Genre getGenreById(long genreId) {
-    return genresDao.getById(genreId);
+  public Genre getGenreById(long genreId) throws NotFoundException {
+    return genresDao.findById(genreId)
+                   .orElseThrow(() -> new NotFoundException("Genre is not found"));
   }
 }

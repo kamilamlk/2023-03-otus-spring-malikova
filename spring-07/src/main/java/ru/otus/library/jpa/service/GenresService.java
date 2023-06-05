@@ -1,6 +1,7 @@
 package ru.otus.library.jpa.service;
 
 import java.util.List;
+import ru.otus.library.jpa.exception.NotFoundException;
 import ru.otus.library.jpa.models.Genre;
 
 /**
@@ -9,5 +10,5 @@ import ru.otus.library.jpa.models.Genre;
 public interface GenresService {
   List<Genre> findGenres();
 
-  Genre getGenreById(long genreId);
+  Genre getGenreById(long genreId) throws NotFoundException;
 }

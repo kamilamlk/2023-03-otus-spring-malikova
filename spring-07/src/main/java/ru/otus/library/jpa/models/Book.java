@@ -48,7 +48,7 @@ public class Book {
   @JoinColumn(name = "genre_id")
   private Genre genre;
 
-  @OneToMany(mappedBy = "book")
+  @OneToMany(mappedBy = "book", orphanRemoval = true)
   private List<Comment> comments;
 
   /**

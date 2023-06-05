@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.library.jpa.dao.AuthorsDao;
+import ru.otus.library.jpa.exception.NotFoundException;
 import ru.otus.library.jpa.models.Author;
 
 /**
@@ -16,11 +17,12 @@ public class AuthorsServiceImpl implements AuthorsService {
 
   @Override
   public List<Author> findAuthors() {
-    return authorsDao.getAll();
+    return authorsDao.findAll();
   }
 
   @Override
-  public Author getAuthorById(long authorId) {
-    return authorsDao.getById(authorId);
+  public Author getAuthorById(long authorId) throws NotFoundException {
+    return authorsDao.findById(authorId)
+                   . orElseThrow(() -> new NotFoundException("Author is not found"));
   }
 }

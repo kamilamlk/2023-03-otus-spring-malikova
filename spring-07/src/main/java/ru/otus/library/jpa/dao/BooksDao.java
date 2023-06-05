@@ -1,21 +1,18 @@
 package ru.otus.library.jpa.dao;
 
 import java.util.List;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.library.jpa.models.Book;
 
 /**
  * CRUD operations with Books.
  */
-public interface BooksDao {
-  Book save(Book book);
+public interface BooksDao extends JpaRepository<Book, Long> {
 
-  Book getById(long id);
+  Optional<Book> findById(long id);
 
-  Book getByIdEagerly(long id, String graph);
-
-  void update(Book book);
-
-  void delete(Book id);
-
-  List<Book> getAll();
+  @EntityGraph(attributePaths = {"genre", "author"})
+  List<Book> findAll();
 }

@@ -2,6 +2,7 @@ package ru.otus.library.jpa.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +25,9 @@ public class CommentsServiceImpl implements CommentsService {
   @Transactional
   @Override
   public void addComment(long bookId, String commentText) throws NotFoundException {
-    Book book = booksDao.getById(bookId);
-    if (book != null) {
-      Comment comment = new Comment(Default.ZERO, commentText, book);
+    Optional<Book> book = booksDao.findById(bookId);
+    if (book.isPresent()) {
+      Comment comment = new Comment(Default.ZERO, commentText, book.get());
       commentsDao.save(comment);
     } else {
       throw new NotFoundException("No book found");
@@ -35,21 +36,22 @@ public class CommentsServiceImpl implements CommentsService {
 
   @Transactional(readOnly = true)
   @Override
-  public List<Comment> getBookComments(long bookId) {
-    Book book = booksDao.getById(bookId);
-    // second option
-    // List<Comment> comments = book.getComments();
-    // Hibernate.initialize(comments);
-    List<Comment> comments = new ArrayList<>(book.getComments());
-    return comments;
+  public List<Comment> getBookComments(long bookId) throws NotFoundException {
+    Optional<Book> book = booksDao.findById(bookId);
+    if (book.isPresent()) {
+      return new ArrayList<>(book.get().getComments());
+    } else {
+      throw new NotFoundException("No book found");
+    }
   }
 
   @Transactional
   @Override
   public void deleteComment(long commentId) throws NotFoundException {
-    Comment comment = commentsDao.getById(commentId);
-    if (comment != null) {
-      commentsDao.delete(comment);
+    Optional<Comment> comment = commentsDao.findById(commentId);
+
+    if (comment.isPresent()) {
+      commentsDao.delete(comment.get());
     } else {
       throw new NotFoundException("No comment found");
     }
@@ -58,10 +60,10 @@ public class CommentsServiceImpl implements CommentsService {
   @Transactional
   @Override
   public void updateComment(long commentId, String commentText) throws NotFoundException {
-    Comment comment = commentsDao.getById(commentId);
-    if (comment != null) {
-      comment.setCommentText(commentText);
-      commentsDao.update(comment);
+    Optional<Comment> comment = commentsDao.findById(commentId);
+    if (comment.isPresent()) {
+      comment.get().setCommentText(commentText);
+      commentsDao.save(comment.get());
     } else {
       throw new NotFoundException("No comment found");
     }

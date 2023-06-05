@@ -1,16 +1,15 @@
 package ru.otus.library.jpa.dao;
 
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.library.jpa.models.Comment;
 
 /**
  * CRUD operations with Comment.
  */
-public interface CommentsDao {
-  Comment save(Comment comment);
+public interface CommentsDao extends JpaRepository<Comment, Long> {
 
-  Comment getById(long id);
+  Optional<Comment> findById(long id);
 
-  void update(Comment comment);
-
-  void delete(Comment comment);
+  void deleteById(Long id);
 }

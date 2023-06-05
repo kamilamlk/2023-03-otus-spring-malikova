@@ -2,6 +2,7 @@ package ru.otus.library.jpa.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,17 +26,21 @@ public class BooksServiceImpl implements BooksService {
 
   @Override
   public List<Book> findBooks() {
-    return booksDao.getAll();
+    return booksDao.findAll();
   }
 
   @Override
-  public Book getBook(long bookId) {
-    return booksDao.getById(bookId);
+  public Book getBook(long bookId) throws NotFoundException {
+    return booksDao.findById(bookId)
+                   .orElseThrow(() -> new NotFoundException("Book is not found"));
   }
 
   @Transactional
   @Override
-  public void addBook(String title, int publicationYear, long authorId, long genreId) {
+  public void addBook(String title,
+                      int publicationYear,
+                      long authorId,
+                      long genreId) throws NotFoundException {
     Author author = authorsService.getAuthorById(authorId);
     Genre genre = genreService.getGenreById(genreId);
 
@@ -52,11 +57,11 @@ public class BooksServiceImpl implements BooksService {
           long authorId,
           long genreId
   ) throws NotFoundException {
-    Book book = booksDao.getById(id);
-    if (book == null) {
+    Optional<Book> book = booksDao.findById(id);
+    if (book.isEmpty()) {
       throw new NotFoundException("No book found");
     }
-    Book.BookBuilder builder = book.getBuilder();
+    Book.BookBuilder builder = book.get().getBuilder();
 
     if (!Objects.equals(title, Default.NONE)) {
       builder.title(title);
@@ -77,6 +82,6 @@ public class BooksServiceImpl implements BooksService {
     }
 
     Book resultingBook = builder.build();
-    booksDao.update(resultingBook);
+    booksDao.save(resultingBook);
   }
 }

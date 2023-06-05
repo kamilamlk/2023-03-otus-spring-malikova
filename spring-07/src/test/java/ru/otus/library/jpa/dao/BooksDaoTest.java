@@ -1,26 +1,29 @@
 package ru.otus.library.jpa.dao;
 
+import jakarta.persistence.TypedQuery;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.library.jpa.models.Author;
 import ru.otus.library.jpa.models.Book;
+import ru.otus.library.jpa.models.Comment;
 import ru.otus.library.jpa.models.Genre;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Testing BooksDao CRUD operations")
 @DataJpaTest
-@Import(BooksDaoJpa.class)
-public class BooksDaoJpaTest {
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+public class BooksDaoTest {
   private static final long EXISTING_BOOK_ID = 1;
 
   @Autowired
-  private BooksDaoJpa booksDao;
+  private BooksDao booksDao;
 
   @Autowired
   private TestEntityManager em;
@@ -45,21 +48,6 @@ public class BooksDaoJpaTest {
             .matches(r -> r.getId() > 0);
   }
 
-  @DisplayName("Returns book by it's identification")
-  @Test
-  void shouldGetById() {
-    Book resultingBook = booksDao.getById(EXISTING_BOOK_ID);
-    Book expectedBook = em.find(Book.class, EXISTING_BOOK_ID);
-    assertThat(resultingBook)
-            .matches(r -> r.getId() == EXISTING_BOOK_ID)
-            .matches(r -> r.getTitle().equals(expectedBook.getTitle()))
-            .matches(r -> r.getPublicationYear() == expectedBook.getPublicationYear())
-            .matches(r -> r.getAuthor().getId() == expectedBook.getAuthor().getId())
-            .matches(r -> r.getAuthor().getName().equals(expectedBook.getAuthor().getName()))
-            .matches(r -> r.getGenre().getId() == expectedBook.getGenre().getId())
-            .matches(r -> r.getGenre().getName().equals(expectedBook .getGenre().getName()));
-  }
-
   @DisplayName("Updates book information")
   @Test
   void shouldUpdate() {
@@ -68,7 +56,7 @@ public class BooksDaoJpaTest {
     String oldTitle = book.getTitle();
     book.setTitle(newTitle);
     em.detach(book);
-    booksDao.update(book);
+    booksDao.save(book);
     Book resultingBook = em.find(Book.class, EXISTING_BOOK_ID);
     assertThat(resultingBook.getTitle()).isNotEqualTo(oldTitle).isEqualTo(newTitle);
   }
@@ -78,7 +66,15 @@ public class BooksDaoJpaTest {
   void shouldDeleteById() {
     Book book = em.find(Book.class, EXISTING_BOOK_ID);
     booksDao.delete(book);
-    assertThat(booksDao.getById(EXISTING_BOOK_ID)).isNull();
+    assertThat(booksDao.findById(EXISTING_BOOK_ID)).isEmpty();
+
+    TypedQuery<Comment> query = em.getEntityManager()
+                                        .createQuery(
+                                                "select c from Comment c where c.book.id = :id",
+                                                Comment.class
+                                        );
+    query.setParameter("id", EXISTING_BOOK_ID);
+    assertThat(query.getResultList()).isEmpty();
   }
 
   @DisplayName("Returns list of one book")
@@ -88,7 +84,7 @@ public class BooksDaoJpaTest {
                                                 .unwrap(SessionFactory.class);
       sessionFactory.getStatistics().setStatisticsEnabled(true);
 
-      List<Book> books = booksDao.getAll();
+      List<Book> books = booksDao.findAll();
 
       assertThat(books).isNotNull().hasSize(1)
               .allMatch(b -> b.getId() > 0)

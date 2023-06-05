@@ -10,7 +10,7 @@ import ru.otus.library.jpa.models.Comment;
 public interface CommentsService {
   void addComment(long bookId, String comment) throws NotFoundException;
 
-  List<Comment> getBookComments(long bookId);
+  List<Comment> getBookComments(long bookId) throws NotFoundException;
 
   void deleteComment(long commentId) throws NotFoundException;
 

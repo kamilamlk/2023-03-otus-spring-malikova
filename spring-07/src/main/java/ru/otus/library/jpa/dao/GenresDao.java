@@ -1,19 +1,23 @@
 package ru.otus.library.jpa.dao;
 
 import java.util.List;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.otus.library.jpa.models.Genre;
 
 /**
  * CRUD operations with Genres.
  */
-public interface GenresDao {
-  Genre save(Genre genre);
+public interface GenresDao extends JpaRepository<Genre, Long> {
 
-  List<Genre> getAll();
+  List<Genre> findAll();
 
-  Genre getById(long id);
+  Optional<Genre> findById(long id);
 
-  void update(Genre genre);
-
-  void delete(Genre genre);
+  @Modifying
+  @Query("update Genre g set g.name = :name where g.id = :id")
+  void update(@Param("id") long id, @Param("name") String name);
 }

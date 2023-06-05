@@ -25,7 +25,7 @@ public class GenresServiceImplTest {
   @Test
   void shouldPrintGenres() {
     List<Genre> genres = List.of(GENRE);
-    doReturn(genres).when(genresDao).getAll();
+    doReturn(genres).when(genresDao).findAll();
 
     List<Genre> result = authorsService.findGenres();
     assertThat(result).containsExactlyInAnyOrderElementsOf(genres);

@@ -25,7 +25,7 @@ public class AuthorsServiceImplTest {
   @Test
   void shouldPrintAuthors() {
     List<Author> authors = List.of(AUTHOR);
-    doReturn(authors).when(authorsDao).getAll();
+    doReturn(authors).when(authorsDao).findAll();
 
     List<Author> result = authorsService.findAuthors();
     assertThat(result).containsExactlyInAnyOrderElementsOf(authors);

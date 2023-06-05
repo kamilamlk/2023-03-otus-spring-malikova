@@ -47,19 +47,33 @@ public class CommandRunner {
     ioService.writeGenres(genres);
   }
 
+  /**
+   * Shows book.
+   */
   @ShellMethod(value = "Show books command", key = {"book"})
   public void showBook(@ShellOption long bookId) {
-    Book book = booksService.getBook(bookId);
-    ioService.writeBook(book);
+    try {
+      Book book = booksService.getBook(bookId);
+      ioService.writeBook(book);
+    } catch (NotFoundException e) {
+      ioService.writeLine(e.getMessage());
+    }
   }
 
+  /**
+   * Adds book.
+   */
   @ShellMethod(value = "Add book command", key = {"book-add"})
   public void addBook(
           @ShellOption(value = {"-t", "--title"}) String title,
           @ShellOption(value = {"-y", "--year"}) int publicationYear,
           @ShellOption(value = {"-a", "--author"}) long authorId,
           @ShellOption(value = {"-g", "--genre"}) long genreId) {
-    booksService.addBook(title, publicationYear, authorId, genreId);
+    try {
+      booksService.addBook(title, publicationYear, authorId, genreId);
+    } catch (NotFoundException e) {
+      ioService.writeLine(e.getMessage());
+    }
   }
 
   /**
@@ -103,8 +117,12 @@ public class CommandRunner {
    */
   @ShellMethod(value = "Shows book comments", key = {"comments"})
   public void showBookComments(@ShellOption long bookId) {
-    List<Comment> comments = commentsService.getBookComments(bookId);
-    ioService.writeComments(comments);
+    try {
+      List<Comment> comments = commentsService.getBookComments(bookId);
+      ioService.writeComments(comments);
+    } catch (NotFoundException e) {
+      ioService.writeLine(e.getMessage());
+    }
   }
 
   /**

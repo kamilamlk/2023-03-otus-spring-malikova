@@ -10,9 +10,12 @@ import ru.otus.library.jpa.models.Book;
 public interface BooksService {
   List<Book> findBooks();
 
-  Book getBook(long bookId);
+  Book getBook(long bookId) throws NotFoundException;
 
-  void addBook(String title, int publicationYear, long authorId, long genreId);
+  void addBook(String title,
+               int publicationYear,
+               long authorId,
+               long genreId) throws NotFoundException;
 
   void updateBook(
           long id,

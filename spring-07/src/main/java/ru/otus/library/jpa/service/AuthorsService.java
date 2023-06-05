@@ -1,6 +1,7 @@
 package ru.otus.library.jpa.service;
 
 import java.util.List;
+import ru.otus.library.jpa.exception.NotFoundException;
 import ru.otus.library.jpa.models.Author;
 
 /**
@@ -9,5 +10,5 @@ import ru.otus.library.jpa.models.Author;
 public interface AuthorsService {
   List<Author> findAuthors();
 
-  Author getAuthorById(long authorId);
+  Author getAuthorById(long authorId) throws NotFoundException;
 }
