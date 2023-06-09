@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.library.jpa.config.Default;
 import ru.otus.library.jpa.dao.BooksDao;
-import ru.otus.library.jpa.exception.NotFoundException;
 import ru.otus.library.jpa.models.Author;
 import ru.otus.library.jpa.models.Book;
 import ru.otus.library.jpa.models.Genre;
@@ -46,7 +45,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Correctly builds book to insert")
   @Test
-  void shouldCorrectlyAddBook() throws NotFoundException {
+  void shouldCorrectlyAddBook() {
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
 
@@ -57,7 +56,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's title")
   @Test
-  void shouldUpdateTitle() throws NotFoundException {
+  void shouldUpdateTitle() {
     String newTitle = "New Title";
     Book expectedBook = new Book(BOOK.getId(), newTitle, BOOK.getPublicationYear(), AUTHOR, GENRE, List.of());
 
@@ -71,7 +70,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's publication year")
   @Test
-  void shouldUpdatePublicationYear() throws NotFoundException {
+  void shouldUpdatePublicationYear() {
     int newYear = 2005;
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), newYear, AUTHOR, GENRE, List.of());
 
@@ -85,7 +84,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's author")
   @Test
-  void shouldUpdateAuthor() throws NotFoundException {
+  void shouldUpdateAuthor() {
     Author newAuthor = new Author(3L, "New Author");
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), BOOK.getPublicationYear(), newAuthor, GENRE, List.of());
 
@@ -99,7 +98,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's genre")
   @Test
-  void shouldUpdateGenre() throws NotFoundException {
+  void shouldUpdateGenre() {
     Genre newGenre = new Genre(3L, "New Genre");
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), BOOK.getPublicationYear(), AUTHOR, newGenre, List.of());
 
@@ -113,7 +112,7 @@ public class BooksServiceImplTest {
 
   @DisplayName("Updates book's all infjpaation")
   @Test
-  void shouldUpdateAllParams() throws NotFoundException {
+  void shouldUpdateAllParams() {
     String newTitle = "New Title";
     int newYear = 2005;
     Author newAuthor = new Author(3L, "New Author");

@@ -36,7 +36,7 @@ public class AuthorsDaoTest {
     String oldName = author.getName();
     author.setName("New name");
     em.detach(author);
-    authorsDao.update(author.getId(), author.getName());
+    authorsDao.save(author);
 
     Author resultingAuthor = authorsDao.findById(ID).get();
     assertThat(resultingAuthor.getName()).isNotEqualTo(oldName);
@@ -46,7 +46,7 @@ public class AuthorsDaoTest {
   @Test
   void shouldDeleteAuthor() {
     Author author = authorsDao.findById(ID).get();
-    authorsDao.deleteById(author.getId());
+    authorsDao.delete(author);
     assertTrue(authorsDao.findById(ID).isEmpty());
   }
 }

@@ -22,9 +22,8 @@ public class CommentsServiceImpl implements CommentsService {
   private final CommentsDao commentsDao;
   private final BooksDao booksDao;
 
-  @Transactional
   @Override
-  public void addComment(long bookId, String commentText) throws NotFoundException {
+  public void addComment(long bookId, String commentText) {
     Optional<Book> book = booksDao.findById(bookId);
     if (book.isPresent()) {
       Comment comment = new Comment(Default.ZERO, commentText, book.get());
@@ -36,7 +35,7 @@ public class CommentsServiceImpl implements CommentsService {
 
   @Transactional(readOnly = true)
   @Override
-  public List<Comment> getBookComments(long bookId) throws NotFoundException {
+  public List<Comment> getBookComments(long bookId) {
     Optional<Book> book = booksDao.findById(bookId);
     if (book.isPresent()) {
       return new ArrayList<>(book.get().getComments());
@@ -47,7 +46,7 @@ public class CommentsServiceImpl implements CommentsService {
 
   @Transactional
   @Override
-  public void deleteComment(long commentId) throws NotFoundException {
+  public void deleteComment(long commentId) {
     Optional<Comment> comment = commentsDao.findById(commentId);
 
     if (comment.isPresent()) {
@@ -59,7 +58,7 @@ public class CommentsServiceImpl implements CommentsService {
 
   @Transactional
   @Override
-  public void updateComment(long commentId, String commentText) throws NotFoundException {
+  public void updateComment(long commentId, String commentText) {
     Optional<Comment> comment = commentsDao.findById(commentId);
     if (comment.isPresent()) {
       comment.get().setCommentText(commentText);

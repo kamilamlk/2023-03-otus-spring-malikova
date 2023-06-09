@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.library.jpa.dao.BooksDao;
 import ru.otus.library.jpa.dao.CommentsDao;
-import ru.otus.library.jpa.exception.NotFoundException;
 import ru.otus.library.jpa.models.Author;
 import ru.otus.library.jpa.models.Book;
 import ru.otus.library.jpa.models.Comment;
@@ -42,7 +41,7 @@ public class CommentsServiceImplTest {
 
   @DisplayName("Checks that comment is added")
   @Test
-  void shouldAddComment() throws NotFoundException {
+  void shouldAddComment() {
     doReturn(Optional.of(BOOK)).when(booksDao).findById(anyLong());
     doReturn(COMMENT).when(commentsDao).save(any());
     commentsService.addComment(BOOK.getId(), COMMENT_TEXT);
@@ -51,7 +50,7 @@ public class CommentsServiceImplTest {
 
   @DisplayName("Checks that comments are printed in ioService")
   @Test
-  void shouldShowComments() throws NotFoundException {
+  void shouldShowComments() {
     List<Comment> comments = List.of(COMMENT);
     Book book = new Book(1L, TITLE, 2000, AUTHOR, GENRE, comments);
     doReturn(Optional.of(book)).when(booksDao).findById(anyLong());
@@ -61,7 +60,7 @@ public class CommentsServiceImplTest {
 
   @DisplayName("Checks that comment is deleted")
   @Test
-  void shouldDeleteComment() throws NotFoundException {
+  void shouldDeleteComment() {
     doReturn(Optional.of(COMMENT)).when(commentsDao).findById(anyLong());
     commentsService.deleteComment(COMMENT.getId());
     verify(commentsDao, times(1)).delete(COMMENT);
@@ -69,7 +68,7 @@ public class CommentsServiceImplTest {
 
   @DisplayName("Checks that comment is updated")
   @Test
-  void shouldUpdateComment() throws NotFoundException {
+  void shouldUpdateComment() {
     String commentText = "Updated test";
     Comment expectedComment = new Comment(COMMENT.getId(), commentText, BOOK);
     doReturn(Optional.of(COMMENT)).when(commentsDao).findById(anyLong());

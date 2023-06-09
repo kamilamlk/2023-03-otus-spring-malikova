@@ -19,14 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class CommentsDaoTest {
   private final long EXCISTING_ID = 1;
-  private final Book BOOK = new Book(
-          EXCISTING_ID,
-          "The Shining",
-          1977,
-          new Author(1L, "Stephen King"),
-          new Genre(1L, "FICTION"),
-          List.of()
-  );
+
   @Autowired
   private CommentsDao commentsDao;
 
@@ -38,7 +31,7 @@ public class CommentsDaoTest {
   void shouldDeleteById() {
     Comment comment = em.find(Comment.class, EXCISTING_ID);
     Book book = comment.getBook();
-    commentsDao.deleteById(comment.getId());
+    commentsDao.delete(comment);
 
     assertThat(commentsDao.findById(EXCISTING_ID)).isEmpty();
     assertThat(em.find(Book.class, book.getId())).isNotNull();

@@ -30,7 +30,7 @@ public class BooksServiceImpl implements BooksService {
   }
 
   @Override
-  public Book getBook(long bookId) throws NotFoundException {
+  public Book getBook(long bookId) {
     return booksDao.findById(bookId)
                    .orElseThrow(() -> new NotFoundException("Book is not found"));
   }
@@ -40,7 +40,7 @@ public class BooksServiceImpl implements BooksService {
   public void addBook(String title,
                       int publicationYear,
                       long authorId,
-                      long genreId) throws NotFoundException {
+                      long genreId) {
     Author author = authorsService.getAuthorById(authorId);
     Genre genre = genreService.getGenreById(genreId);
 
@@ -56,7 +56,7 @@ public class BooksServiceImpl implements BooksService {
           int publicationYear,
           long authorId,
           long genreId
-  ) throws NotFoundException {
+  ) {
     Optional<Book> book = booksDao.findById(id);
     if (book.isEmpty()) {
       throw new NotFoundException("No book found");

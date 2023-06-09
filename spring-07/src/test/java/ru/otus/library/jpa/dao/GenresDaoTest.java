@@ -29,7 +29,7 @@ public class GenresDaoTest {
     String oldName = genre.getName();
     genre.setName("New name");
     em.detach(genre);
-    genreDao.update(genre.getId(), genre.getName());
+    genreDao.save(genre);
 
     Optional<Genre> resultingGenre = genreDao.findById(ID);
     assertThat(resultingGenre)
