@@ -1,8 +1,8 @@
 package ru.otus.library.db.service;
 
+import java.util.List;
 import ru.otus.library.db.exception.NotFoundException;
 import ru.otus.library.db.models.Book;
-import java.util.List;
 
 /**
  * Service responsible for operations with Books.
@@ -10,18 +10,18 @@ import java.util.List;
 public interface BooksService {
   List<Book> findBooks();
 
-  Book getBook(long bookId) throws NotFoundException;
+  Book getBook(String bookId) throws NotFoundException;
 
   void addBook(String title,
                int publicationYear,
-               long authorId,
-               long genreId) throws NotFoundException;
+               String authorId,
+               String genreId) throws NotFoundException;
 
   void updateBook(
-          long id,
+          String id,
           String title,
           int publicationYear,
-          long authorId,
-          long genreId
+          String authorId,
+          String genreId
   ) throws NotFoundException;
 }

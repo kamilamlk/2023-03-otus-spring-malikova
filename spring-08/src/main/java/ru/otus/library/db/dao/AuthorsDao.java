@@ -1,10 +1,13 @@
 package ru.otus.library.db.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.library.db.models.Author;
 
 /**
  * CRUD operations with Author.
  */
-public interface AuthorsDao extends JpaRepository<Author, Long> {
+public interface AuthorsDao extends MongoRepository<Author, String> {
+  @Override
+  List<Author> findAll();
 }

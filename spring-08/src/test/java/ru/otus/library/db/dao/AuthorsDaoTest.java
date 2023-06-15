@@ -3,30 +3,24 @@ package ru.otus.library.db.dao;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import ru.otus.library.db.models.Author;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Testing AuthorsDao operations")
-@DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@DataMongoTest
 public class AuthorsDaoTest {
-  private final long ID = 1L;
+  private final String ID = "1";
 
   @Autowired
   private AuthorsDao authorsDao;
-  @Autowired
-  private TestEntityManager em;
 
   @Test
   void shouldSaveNewAuthor() {
-    Author author = new Author(0L, "Sample Author");
+    Author author = new Author(null, "Sample Author");
     authorsDao.save(author);
-    assertThat(author.getId()).isGreaterThan(0L);
+    assertThat(author.getId()).isNotNull();
   }
 
   @DisplayName("Should update name")
@@ -35,7 +29,7 @@ public class AuthorsDaoTest {
     Author author = authorsDao.findById(ID).get();
     String oldName = author.getName();
     author.setName("New name");
-    em.detach(author);
+
     authorsDao.save(author);
 
     Author resultingAuthor = authorsDao.findById(ID).get();

@@ -19,9 +19,10 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest(classes = BooksServiceImpl.class)
 public class BooksServiceImplTest {
   private final String TITLE = "Test book";
-  private final Author AUTHOR = new Author(1L, "Test Author");
-  private final Genre GENRE = new Genre(1L, "Test Genre");
-  private final Book BOOK = new Book(0L, TITLE, 2000, AUTHOR, GENRE, List.of());
+  private final Author AUTHOR = new Author("1", "Test Author");
+  private final Genre GENRE = new Genre("1", "Test Genre");
+  private final Book BOOK = new Book("0", TITLE, 2000, AUTHOR, GENRE, List.of());
+  private final Book NEW_BOOK = new Book(null, TITLE, 2000, AUTHOR, GENRE, List.of());
 
   @MockBean
   private BooksDao booksDao;
@@ -51,7 +52,7 @@ public class BooksServiceImplTest {
 
     booksService.addBook(BOOK.getTitle(), BOOK.getPublicationYear(), AUTHOR.getId(), GENRE.getId());
 
-    verify(booksDao).save(BOOK);
+    verify(booksDao).save(NEW_BOOK);
   }
 
   @DisplayName("Updates book's title")
@@ -64,7 +65,7 @@ public class BooksServiceImplTest {
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
 
-    booksService.updateBook(BOOK.getId(), newTitle, 0, Default.ZERO, Default.ZERO);
+    booksService.updateBook(BOOK.getId(), newTitle, 0, Default.NONE, Default.NONE);
     verify(booksDao).save(expectedBook);
   }
 
@@ -78,35 +79,35 @@ public class BooksServiceImplTest {
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
 
-    booksService.updateBook(BOOK.getId(), Default.NONE, newYear, Default.ZERO, Default.ZERO);
+    booksService.updateBook(BOOK.getId(), Default.NONE, newYear, Default.NONE, Default.NONE);
     verify(booksDao).save(expectedBook);
   }
 
   @DisplayName("Updates book's author")
   @Test
   void shouldUpdateAuthor() {
-    Author newAuthor = new Author(3L, "New Author");
+    Author newAuthor = new Author("3L", "New Author");
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), BOOK.getPublicationYear(), newAuthor, GENRE, List.of());
 
     doReturn(Optional.of(BOOK)).when(booksDao).findById(BOOK.getId());
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
     doReturn(newAuthor).when(authorsService).getAuthorById(newAuthor.getId());
 
-    booksService.updateBook(BOOK.getId(), Default.NONE, Default.ZERO, newAuthor.getId(), Default.ZERO);
+    booksService.updateBook(BOOK.getId(), Default.NONE, Default.ZERO, newAuthor.getId(), Default.NONE);
     verify(booksDao).save(expectedBook);
   }
 
   @DisplayName("Updates book's genre")
   @Test
   void shouldUpdateGenre() {
-    Genre newGenre = new Genre(3L, "New Genre");
+    Genre newGenre = new Genre("3L", "New Genre");
     Book expectedBook = new Book(BOOK.getId(), BOOK.getTitle(), BOOK.getPublicationYear(), AUTHOR, newGenre, List.of());
 
     doReturn(Optional.of(BOOK)).when(booksDao).findById(BOOK.getId());
     doReturn(newGenre).when(genresService).getGenreById(newGenre.getId());
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
 
-    booksService.updateBook(BOOK.getId(), Default.NONE, Default.ZERO, Default.ZERO, newGenre.getId());
+    booksService.updateBook(BOOK.getId(), Default.NONE, Default.ZERO, Default.NONE, newGenre.getId());
     verify(booksDao).save(expectedBook);
   }
 
@@ -115,8 +116,8 @@ public class BooksServiceImplTest {
   void shouldUpdateAllParams() {
     String newTitle = "New Title";
     int newYear = 2005;
-    Author newAuthor = new Author(3L, "New Author");
-    Genre newGenre = new Genre(3L, "New Genre");
+    Author newAuthor = new Author("3L", "New Author");
+    Genre newGenre = new Genre("3L", "New Genre");
 
     Book expectedBook = new Book(BOOK.getId(), newTitle, newYear, newAuthor, newGenre, List.of());
 

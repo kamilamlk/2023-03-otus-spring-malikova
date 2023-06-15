@@ -1,11 +1,11 @@
 package ru.otus.library.db.service;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 import ru.otus.library.db.models.Author;
 import ru.otus.library.db.models.Book;
 import ru.otus.library.db.models.Comment;
 import ru.otus.library.db.models.Genre;
-import java.util.List;
 
 /**
  * Reads from and writes to console.
@@ -19,7 +19,7 @@ public class ConsoleIoService implements IoService {
 
   @Override
   public void writeBook(Book book) {
-    writeLine(String.format("%d. %s", book.getId(), book.getTitle()));
+    writeLine(String.format("%s. %s", book.getId(), book.getTitle()));
     writeLine(String.format("   %s", book.getAuthor().getName()));
     writeLine(String.format("   %s", book.getGenre().getName()));
     writeLine(String.format("   Published on %d", book.getPublicationYear()));
@@ -32,7 +32,7 @@ public class ConsoleIoService implements IoService {
 
   @Override
   public void writeAuthor(Author author) {
-    writeLine(String.format("%d. %s", author.getId(), author.getName()));
+    writeLine(String.format("%s. %s", author.getId(), author.getName()));
   }
 
   @Override
@@ -42,7 +42,7 @@ public class ConsoleIoService implements IoService {
 
   @Override
   public void writeGenre(Genre genre) {
-    writeLine(String.format("%d. %s", genre.getId(), genre.getName()));
+    writeLine(String.format("%s. %s", genre.getId(), genre.getName()));
   }
 
   @Override
@@ -57,6 +57,6 @@ public class ConsoleIoService implements IoService {
 
   @Override
   public void writeComment(Comment comment) {
-    writeLine(String.format("%d. %s", comment.getId(), comment.getCommentText()));
+    writeLine(String.format("%s. %s", comment.getId(), comment.getCommentText()));
   }
 }

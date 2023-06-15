@@ -1,8 +1,8 @@
 package ru.otus.library.db.service;
 
+import java.util.List;
 import ru.otus.library.db.exception.NotFoundException;
 import ru.otus.library.db.models.Author;
-import java.util.List;
 
 /**
  * Service responsible for operations with Authors.
@@ -10,5 +10,5 @@ import java.util.List;
 public interface AuthorsService {
   List<Author> findAuthors();
 
-  Author getAuthorById(long authorId) throws NotFoundException;
+  Author getAuthorById(String authorId) throws NotFoundException;
 }

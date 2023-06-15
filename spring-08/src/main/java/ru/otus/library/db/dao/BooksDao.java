@@ -1,15 +1,13 @@
 package ru.otus.library.db.dao;
 
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import ru.otus.library.db.models.Book;
 import java.util.List;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import ru.otus.library.db.models.Book;
 
 /**
  * CRUD operations with Books.
  */
-public interface BooksDao extends JpaRepository<Book, Long> {
+public interface BooksDao extends MongoRepository<Book, String> {
   @Override
-  @EntityGraph(attributePaths = {"genre", "author"})
   List<Book> findAll();
 }

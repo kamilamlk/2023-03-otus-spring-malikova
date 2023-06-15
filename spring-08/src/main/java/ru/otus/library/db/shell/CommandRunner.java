@@ -1,5 +1,6 @@
 package ru.otus.library.db.shell;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -15,7 +16,6 @@ import ru.otus.library.db.service.BooksService;
 import ru.otus.library.db.service.CommentsService;
 import ru.otus.library.db.service.GenresService;
 import ru.otus.library.db.service.IoService;
-import java.util.List;
 
 /**
  * Shell command line runner.
@@ -51,7 +51,7 @@ public class CommandRunner {
    * Shows book.
    */
   @ShellMethod(value = "Show books command", key = {"book"})
-  public void showBook(@ShellOption long bookId) {
+  public void showBook(@ShellOption String bookId) {
     try {
       Book book = booksService.getBook(bookId);
       ioService.writeBook(book);
@@ -67,8 +67,8 @@ public class CommandRunner {
   public void addBook(
           @ShellOption(value = {"-t", "--title"}) String title,
           @ShellOption(value = {"-y", "--year"}) int publicationYear,
-          @ShellOption(value = {"-a", "--author"}) long authorId,
-          @ShellOption(value = {"-g", "--genre"}) long genreId) {
+          @ShellOption(value = {"-a", "--author"}) String authorId,
+          @ShellOption(value = {"-g", "--genre"}) String genreId) {
     try {
       booksService.addBook(title, publicationYear, authorId, genreId);
     } catch (NotFoundException e) {
@@ -81,11 +81,11 @@ public class CommandRunner {
    */
   @ShellMethod(value = "Updates book's infjpaation", key = {"book-update"})
   public void updateBook(
-          @ShellOption long bookId,
+          @ShellOption String bookId,
           @ShellOption(value = {"-t", "--title"}, defaultValue = Default.NONE) String title,
           @ShellOption(value = {"-y", "--year"}, defaultValue = Default.ZERO_STRING) int year,
-          @ShellOption(value = {"-a", "--author"}, defaultValue = Default.ZERO_STRING) long authorId,
-          @ShellOption(value = {"-g", "--genre"}, defaultValue = Default.ZERO_STRING) long genreId
+          @ShellOption(value = {"-a", "--author"}, defaultValue = Default.NONE) String authorId,
+          @ShellOption(value = {"-g", "--genre"}, defaultValue = Default.NONE) String genreId
   ) {
     try {
       booksService.updateBook(
@@ -104,7 +104,7 @@ public class CommandRunner {
    * Adds book comment.
    */
   @ShellMethod(value = "Adds book comment", key = {"comment-add"})
-  public void addComment(@ShellOption long bookId, @ShellOption String comment) {
+  public void addComment(@ShellOption String bookId, @ShellOption String comment) {
     try {
       commentsService.addComment(bookId, comment);
     } catch (NotFoundException e) {
@@ -116,7 +116,7 @@ public class CommandRunner {
    * Shows book comments.
    */
   @ShellMethod(value = "Shows book comments", key = {"comments"})
-  public void showBookComments(@ShellOption long bookId) {
+  public void showBookComments(@ShellOption String bookId) {
     try {
       List<Comment> comments = commentsService.getBookComments(bookId);
       ioService.writeComments(comments);
@@ -129,7 +129,7 @@ public class CommandRunner {
    * Updates book comment.
    */
   @ShellMethod(value = "Updates book comments", key = {"comment-update"})
-  public void updateComment(@ShellOption long commentId, @ShellOption String commentText) {
+  public void updateComment(@ShellOption String commentId, @ShellOption String commentText) {
     try {
       commentsService.updateComment(commentId, commentText);
     } catch (NotFoundException e) {
@@ -141,7 +141,7 @@ public class CommandRunner {
    * Delete book comment.
    */
   @ShellMethod(value = "Deleted book comments", key = {"comment-delete"})
-  public void deleteComment(@ShellOption long commentId) {
+  public void deleteComment(@ShellOption String commentId) {
     try {
       commentsService.deleteComment(commentId);
     } catch (NotFoundException e) {

@@ -13,7 +13,7 @@ import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest(classes = AuthorsServiceImpl.class)
 public class AuthorsServiceImplTest {
-  private final Author AUTHOR = new Author(1L, "Test Author");
+  private final Author AUTHOR = new Author("1", "Test Author");
 
   @MockBean
   private AuthorsDao authorsDao;

@@ -13,7 +13,7 @@ import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest(classes = GenresServiceImpl.class)
 public class GenresServiceImplTest {
-  private final Genre GENRE = new Genre(1L, "Test Genre");
+  private final Genre GENRE = new Genre("1", "Test Genre");
 
   @MockBean
   private GenresDao genresDao;

@@ -1,11 +1,11 @@
 package ru.otus.library.db.service;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.library.db.dao.AuthorsDao;
 import ru.otus.library.db.exception.NotFoundException;
 import ru.otus.library.db.models.Author;
-import java.util.List;
 
 /**
  * Implementation of service responsible for operations with Authors.
@@ -21,8 +21,8 @@ public class AuthorsServiceImpl implements AuthorsService {
   }
 
   @Override
-  public Author getAuthorById(long authorId) {
+  public Author getAuthorById(String authorId) {
     return authorsDao.findById(authorId)
-                   . orElseThrow(() -> new NotFoundException("Author is not found"));
+                   .orElseThrow(() -> new NotFoundException("Author is not found"));
   }
 }

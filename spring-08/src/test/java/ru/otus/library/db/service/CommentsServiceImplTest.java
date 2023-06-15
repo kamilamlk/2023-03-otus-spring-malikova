@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -24,12 +24,13 @@ import static org.mockito.Mockito.verify;
 public class CommentsServiceImplTest {
   private final String COMMENT_TEXT = "Test comment";
   private final String TITLE = "Test book";
-  private final Author AUTHOR = new Author(1L, "Test Author");
-  private final Genre GENRE = new Genre(1L, "Test Genre");
+  private final Author AUTHOR = new Author("1", "Test Author");
+  private final Genre GENRE = new Genre("1", "Test Genre");
   private final Book BOOK = new Book(
-          1L, TITLE, 2000, AUTHOR,
+          "1", TITLE, 2000, AUTHOR,
           GENRE, List.of());
-  private final Comment COMMENT = new Comment(0L, COMMENT_TEXT, BOOK);
+  private final Comment COMMENT = new Comment("1", COMMENT_TEXT, BOOK);
+  private final Comment NEW_COMMENT = new Comment(null, COMMENT_TEXT, BOOK);
 
   @MockBean
   private CommentsDao commentsDao;
@@ -42,18 +43,18 @@ public class CommentsServiceImplTest {
   @DisplayName("Checks that comment is added")
   @Test
   void shouldAddComment() {
-    doReturn(Optional.of(BOOK)).when(booksDao).findById(anyLong());
-    doReturn(COMMENT).when(commentsDao).save(any());
+    doReturn(Optional.of(BOOK)).when(booksDao).findById(anyString());
+    doReturn(NEW_COMMENT).when(commentsDao).save(any());
     commentsService.addComment(BOOK.getId(), COMMENT_TEXT);
-    verify(commentsDao, times(1)).save(COMMENT);
+    verify(commentsDao, times(1)).save(NEW_COMMENT);
   }
 
   @DisplayName("Checks that comments are printed in ioService")
   @Test
   void shouldShowComments() {
     List<Comment> comments = List.of(COMMENT);
-    Book book = new Book(1L, TITLE, 2000, AUTHOR, GENRE, comments);
-    doReturn(Optional.of(book)).when(booksDao).findById(anyLong());
+    Book book = new Book("1L", TITLE, 2000, AUTHOR, GENRE, comments);
+    doReturn(Optional.of(book)).when(booksDao).findById(anyString());
     List<Comment> result = commentsService.getBookComments(book.getId());
     assertThat(result).containsExactlyInAnyOrderElementsOf(comments);
   }
@@ -61,7 +62,7 @@ public class CommentsServiceImplTest {
   @DisplayName("Checks that comment is deleted")
   @Test
   void shouldDeleteComment() {
-    doReturn(Optional.of(COMMENT)).when(commentsDao).findById(anyLong());
+    doReturn(Optional.of(COMMENT)).when(commentsDao).findById(anyString());
     commentsService.deleteComment(COMMENT.getId());
     verify(commentsDao, times(1)).delete(COMMENT);
   }
@@ -71,7 +72,7 @@ public class CommentsServiceImplTest {
   void shouldUpdateComment() {
     String commentText = "Updated test";
     Comment expectedComment = new Comment(COMMENT.getId(), commentText, BOOK);
-    doReturn(Optional.of(COMMENT)).when(commentsDao).findById(anyLong());
+    doReturn(Optional.of(COMMENT)).when(commentsDao).findById(anyString());
     commentsService.updateComment(COMMENT.getId(), commentText);
     verify(commentsDao, times(1)).save(expectedComment);
   }

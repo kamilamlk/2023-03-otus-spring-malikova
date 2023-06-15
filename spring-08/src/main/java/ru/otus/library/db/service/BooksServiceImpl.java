@@ -1,5 +1,8 @@
 package ru.otus.library.db.service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,9 +12,6 @@ import ru.otus.library.db.exception.NotFoundException;
 import ru.otus.library.db.models.Author;
 import ru.otus.library.db.models.Book;
 import ru.otus.library.db.models.Genre;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Implementation of service responsible for operations with Books.
@@ -30,7 +30,7 @@ public class BooksServiceImpl implements BooksService {
   }
 
   @Override
-  public Book getBook(long bookId) {
+  public Book getBook(String bookId) {
     return booksDao.findById(bookId)
                    .orElseThrow(() -> new NotFoundException("Book is not found"));
   }
@@ -39,23 +39,23 @@ public class BooksServiceImpl implements BooksService {
   @Override
   public void addBook(String title,
                       int publicationYear,
-                      long authorId,
-                      long genreId) {
+                      String authorId,
+                      String genreId) {
     Author author = authorsService.getAuthorById(authorId);
     Genre genre = genreService.getGenreById(genreId);
 
-    Book book = new Book(Default.ZERO, title, publicationYear, author, genre, List.of());
+    Book book = new Book(null, title, publicationYear, author, genre, List.of());
     booksDao.save(book);
   }
 
   @Transactional
   @Override
   public void updateBook(
-          long id,
+          String id,
           String title,
           int publicationYear,
-          long authorId,
-          long genreId
+          String authorId,
+          String genreId
   ) {
     Optional<Book> book = booksDao.findById(id);
     if (book.isEmpty()) {
@@ -71,12 +71,12 @@ public class BooksServiceImpl implements BooksService {
       builder.publicationYear(publicationYear);
     }
 
-    if (authorId != Default.ZERO) {
+    if (!Objects.equals(authorId, Default.NONE)) {
       Author author = authorsService.getAuthorById(authorId);
       builder.author(author);
     }
 
-    if (genreId != Default.ZERO) {
+    if (!Objects.equals(genreId, Default.NONE)) {
       Genre genre = genreService.getGenreById(genreId);
       builder.genre(genre);
     }
