@@ -10,6 +10,7 @@ import ru.otus.library.db.models.Author;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = AuthorsServiceImpl.class)
 public class AuthorsServiceImplTest {
@@ -29,5 +30,13 @@ public class AuthorsServiceImplTest {
 
     List<Author> result = authorsService.findAuthors();
     assertThat(result).containsExactlyInAnyOrderElementsOf(authors);
+  }
+
+  @DisplayName("Saves new author")
+  @Test
+  void shouldSaveAuthor() {
+    Author newAuthor = new Author("Sample Author");
+    authorsService.addAuthor(newAuthor.getName());
+    verify(authorsDao).save(newAuthor);
   }
 }

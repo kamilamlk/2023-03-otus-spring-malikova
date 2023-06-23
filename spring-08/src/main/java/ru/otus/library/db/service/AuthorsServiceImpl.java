@@ -25,4 +25,10 @@ public class AuthorsServiceImpl implements AuthorsService {
     return authorsDao.findById(authorId)
                    .orElseThrow(() -> new NotFoundException("Author is not found"));
   }
+
+  @Override
+  public void addAuthor(String authorName) {
+    Author author = new Author(authorName);
+    authorsDao.save(author);
+  }
 }

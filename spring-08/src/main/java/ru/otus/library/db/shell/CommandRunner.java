@@ -149,4 +149,8 @@ public class CommandRunner {
     }
   }
 
+  @ShellMethod(value = "Adds new author", key = {"author-add"})
+  public void addAuthor(@ShellOption String authorName) {
+    authorsService.addAuthor(authorName);
+  }
 }

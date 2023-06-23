@@ -1,7 +1,6 @@
 package ru.otus.library.db.service;
 
 import java.util.List;
-import ru.otus.library.db.exception.NotFoundException;
 import ru.otus.library.db.models.Author;
 
 /**
@@ -10,5 +9,7 @@ import ru.otus.library.db.models.Author;
 public interface AuthorsService {
   List<Author> findAuthors();
 
-  Author getAuthorById(String authorId) throws NotFoundException;
+  Author getAuthorById(String authorId);
+
+  void addAuthor(String authorName);
 }
