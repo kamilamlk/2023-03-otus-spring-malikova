@@ -13,7 +13,7 @@ import ru.otus.library.db.models.Book;
 @Component
 @RequiredArgsConstructor
 public class BookCascadeDeleteOperation extends AbstractMongoEventListener<Book> {
-  private CommentsDao commentsDao;
+  private final CommentsDao commentsDao;
 
   @Override
   public void onAfterDelete(AfterDeleteEvent<Book> event) {

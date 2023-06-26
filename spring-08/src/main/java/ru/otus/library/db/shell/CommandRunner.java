@@ -153,4 +153,9 @@ public class CommandRunner {
   public void addAuthor(@ShellOption String authorName) {
     authorsService.addAuthor(authorName);
   }
+
+  @ShellMethod(value = "Update author name", key = {"author-update"})
+  public void updateAuthor(@ShellOption String authorId, @ShellOption String authorName) {
+    authorsService.updateAuthor(authorId, authorName);
+  }
 }

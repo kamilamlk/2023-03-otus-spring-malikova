@@ -31,4 +31,11 @@ public class AuthorsServiceImpl implements AuthorsService {
     Author author = new Author(authorName);
     authorsDao.save(author);
   }
+
+  @Override
+  public void updateAuthor(String authorId, String authorName) {
+    Author author = getAuthorById(authorId);
+    author.setName(authorName);
+    authorsDao.save(author);
+  }
 }

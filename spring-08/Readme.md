@@ -80,11 +80,25 @@
    ```
    comment-delete 1
    ```
-13. Справка
+13. Обновить информацию об авторе автора
+   ```
+   author-update <authorID> <new name>
+   ```
+   ```
+   author-update 1 "Stephen King 2"
+   ```
+14. Добавить автора
+   ```
+   author-add <name>
+   ```
+   ```
+   author-add "Stephen King 2"
+   ```
+15. Справка
    ```
    help
    ```
-14. Завершение работы
+16. Завершение работы
    ```
    exit
    ```

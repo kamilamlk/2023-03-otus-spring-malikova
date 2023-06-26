@@ -4,17 +4,24 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import ru.otus.library.db.models.Author;
+import ru.otus.library.db.models.Book;
+import ru.otus.library.db.mongo.event.AuthorCascadeOperation;
+import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Testing AuthorsDao operations")
 @DataMongoTest
+@Import(AuthorCascadeOperation.class)
 public class AuthorsDaoTest {
   private final String ID = "1";
 
   @Autowired
   private AuthorsDao authorsDao;
+  @Autowired
+  private BooksDao booksDao;
 
   @Test
   void shouldSaveNewAuthor() {
@@ -34,6 +41,8 @@ public class AuthorsDaoTest {
 
     Author resultingAuthor = authorsDao.findById(ID).get();
     assertThat(resultingAuthor.getName()).isNotEqualTo(oldName);
+    List<Book> books = booksDao.findAllByAuthor_Id(ID);
+    assertThat(books).allMatch(b -> b.getAuthor().equals(resultingAuthor));
   }
 
   @DisplayName("Should delete")

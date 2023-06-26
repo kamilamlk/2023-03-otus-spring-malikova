@@ -12,4 +12,6 @@ public interface AuthorsService {
   Author getAuthorById(String authorId);
 
   void addAuthor(String authorName);
+
+  void updateAuthor(String authorId, String authorName);
 }
