@@ -12,6 +12,8 @@ public interface CommentsService {
 
   List<Comment> getBookComments(String bookId) throws NotFoundException;
 
+  Comment getComment(String commentId);
+
   void deleteComment(String commentId) throws NotFoundException;
 
   void updateComment(String commentId, String commentText) throws NotFoundException;

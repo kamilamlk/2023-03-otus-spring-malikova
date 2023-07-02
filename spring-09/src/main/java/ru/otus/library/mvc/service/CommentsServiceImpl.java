@@ -44,6 +44,17 @@ public class CommentsServiceImpl implements CommentsService {
     }
   }
 
+  @Override
+  public Comment getComment(String commentId) {
+    Optional<Comment> comment = commentsDao.findById(commentId);
+
+    if (comment.isPresent()) {
+      return comment.get();
+    } else {
+      throw new NotFoundException("No comment found");
+    }
+  }
+
   @Transactional
   @Override
   public void deleteComment(String commentId) {

@@ -13,6 +13,7 @@ import ru.otus.library.mvc.models.Genre;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -49,10 +50,9 @@ public class BooksServiceImplTest {
   void shouldCorrectlyAddBook() {
     doReturn(AUTHOR).when(authorsService).getAuthorById(AUTHOR.getId());
     doReturn(GENRE).when(genresService).getGenreById(GENRE.getId());
-
-    booksService.addBook(BOOK.getTitle(), BOOK.getPublicationYear(), AUTHOR.getId(), GENRE.getId());
-
-    verify(booksDao).save(NEW_BOOK);
+    doReturn(BOOK).when(booksDao).save(any(Book.class));
+    String result = booksService.addBook(BOOK.getTitle(), BOOK.getPublicationYear(), AUTHOR.getId(), GENRE.getId());
+    assertThat(result).isEqualTo(BOOK.getId());
   }
 
   @DisplayName("Updates book's title")

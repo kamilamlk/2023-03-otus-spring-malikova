@@ -12,7 +12,7 @@ public interface BooksService {
 
   Book getBook(String bookId) throws NotFoundException;
 
-  void addBook(String title,
+  String addBook(String title,
                int publicationYear,
                String authorId,
                String genreId) throws NotFoundException;

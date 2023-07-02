@@ -37,7 +37,7 @@ public class BooksServiceImpl implements BooksService {
 
   @Transactional
   @Override
-  public void addBook(String title,
+  public String addBook(String title,
                       int publicationYear,
                       String authorId,
                       String genreId) {
@@ -45,7 +45,8 @@ public class BooksServiceImpl implements BooksService {
     Genre genre = genreService.getGenreById(genreId);
 
     Book book = new Book(null, title, publicationYear, author, genre, List.of());
-    booksDao.save(book);
+    Book resultingBook = booksDao.save(book);
+    return resultingBook.getId();
   }
 
   @Transactional
