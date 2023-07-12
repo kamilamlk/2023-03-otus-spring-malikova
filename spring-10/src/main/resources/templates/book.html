@@ -44,22 +44,26 @@
             data-tag="font"
     />
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
+    <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        function showEditPage() {
+
+        }
+    </script>
 </head>
 <body>
-<div>
-    <link href="../static/home.css" th:href="@{/home.css}" rel="stylesheet" />
+    <div>
+        <link href="../static/home.css" th:href="@{/home.css}" rel="stylesheet" />
 
-    <div class="home-container">
+        <div class="home-container">
         <header data-role="Header" class="home-header">
             <svg viewBox="0 0 1024 1024" class="home-icon">
                 <path
                         d="M854 512v-342h-214v342l106-64zM854 86q34 0 59 25t25 59v512q0 34-25 60t-59 26h-512q-34 0-60-26t-26-60v-512q0-34 26-59t60-25h512zM170 256v598h598v84h-598q-34 0-59-25t-25-59v-598h84z">
                 </path>
             </svg>
-            <div class="ç">
-                <nav
-                        class="navigation-links-nav navigation-links-root-class-name10"
-                >
+            <div class="home-nav">
+                <nav class="navigation-links-nav navigation-links-root-class-name10">
                     <span class="navigation-links-text"><a href="/" th:href="@{/}">Books</a></span>
                     <span class="navigation-links-text"><a href="/authors" th:href="@{/authors}">Authors</a></span>
                     <span class="navigation-links-text"><a href="/genres" th:href="@{/genres}">Genres</a></span>
@@ -71,10 +75,11 @@
         <div class="home-blog">
             <div class="home-container2" th:object="${book}">
                 <div class="blog-text">
-                    <a th:href="@{/book/{id}/edit(id = *{id})}" href="edit-book.html">Edit the book</a>
+                    <a th:href="@{/book/{id}/edit(id = *{id})}" onclick="showEdit()">Edit the book</a>
                 </div>
                 <hr>
                 <h2 class="home-text" th:text="*{title}">Title</h2>
+                <span class="blog-text" id="book-id" th:text="*{id}" hidden="hidden"></span>
                 <span class="blog-text" th:text="*{publicationYear}">Publication year</span>
                 <span class="blog-text" th:text="*{author.getName()}">Author</span>
                 <span class="blog-text" th:text="*{genre.getName()}">Genre</span>
@@ -94,11 +99,10 @@
 
                     <div class="input-form">
                         <form id="comment-add-form" action="book.html"
-                              th:action="@{/book/{id}/comment(id = ${book.id})}"
-                              th:method="post">
-                            <input class="input" name="commentText" placeholder="Comment..."/>
+                              th:action="@{/api/book/{id}/comment(id = ${book.id})}">
+                            <input class="input" name="commentText" id = "comment-text-input" placeholder="Comment..."/>
                             <div class="row">
-                                <button class="button" type="submit">Add</button>
+                                <button class="button" id="save-comment-button" type="submit">Add</button>
                             </div>
                         </form>
                     </div>
@@ -106,6 +110,42 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('save-comment-button');
+
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent form submission
+
+                console.log("Save Comment");
+                const bookId = document.getElementById("book-id");
+                const commentText = document.getElementById("comment-text-input");
+                const comment = {
+                    id: null, commentText: commentText.value,
+                };
+
+                fetch("/api/book/"+ bookId.textContent +"/comment", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(comment)
+                }).then(response => {
+                    if (response.ok) {
+                        response.json().then(data => {
+                            const id = data.id;
+                            console.log(id);
+                            // Redirect to the desired URL
+                            window.location.href = "/book/" + id;
+                        });
+                    }
+                }).catch(error => {
+                    console.log(error);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

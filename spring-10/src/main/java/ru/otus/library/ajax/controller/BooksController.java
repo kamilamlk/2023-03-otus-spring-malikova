@@ -1,7 +1,6 @@
 package ru.otus.library.ajax.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.otus.library.ajax.controller.dto.AuthorDto;
 import ru.otus.library.ajax.controller.dto.BookDto;
 import ru.otus.library.ajax.controller.dto.GenreDto;
+import ru.otus.library.ajax.models.Author;
 import ru.otus.library.ajax.models.Book;
+import ru.otus.library.ajax.models.Genre;
 import ru.otus.library.ajax.service.AuthorsService;
 import ru.otus.library.ajax.service.BooksService;
 import ru.otus.library.ajax.service.GenresService;
@@ -31,12 +32,7 @@ public class BooksController {
    * Returns all books.
    */
   @GetMapping("/")
-  public String findBooks(Model model) {
-    List<BookDto> books = booksService.findBooks()
-                                  .stream()
-                                  .map(BookDto::toDto)
-                                  .collect(Collectors.toList());
-    model.addAttribute("books", books);
+  public String findBooks() {
     return "index";
   }
 
@@ -77,6 +73,8 @@ public class BooksController {
     List<GenreDto> genres = genresService.findGenres()
                                     .stream().map(GenreDto::toDto)
                                     .toList();
+
+    model.addAttribute("book", new Book(null, null, 0, new Author(), new Genre(), List.of()));
     model.addAttribute("authors", authors);
     model.addAttribute("genres", genres);
     return "new-book";

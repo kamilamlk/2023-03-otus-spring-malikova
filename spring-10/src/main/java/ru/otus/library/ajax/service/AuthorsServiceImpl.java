@@ -27,9 +27,10 @@ public class AuthorsServiceImpl implements AuthorsService {
   }
 
   @Override
-  public void addAuthor(String authorName) {
+  public String addAuthor(String authorName) {
     Author author = new Author(authorName);
-    authorsDao.save(author);
+    Author resultingAuthor = authorsDao.save(author);
+    return resultingAuthor.getId();
   }
 
   @Override

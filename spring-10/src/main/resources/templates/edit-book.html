@@ -42,6 +42,7 @@
           data-tag="font"
   />
   <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
+  <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
 </head>
 <body>
 <div>
@@ -50,8 +51,7 @@
   <div class="home-container">
     <header data-role="Header" class="home-header">
       <svg viewBox="0 0 1024 1024" class="home-icon">
-        <path
-                d="M854 512v-342h-214v342l106-64zM854 86q34 0 59 25t25 59v512q0 34-25 60t-59 26h-512q-34 0-60-26t-26-60v-512q0-34 26-59t60-25h512zM170 256v598h598v84h-598q-34 0-59-25t-25-59v-598h84z">
+        <path d="M854 512v-342h-214v342l106-64zM854 86q34 0 59 25t25 59v512q0 34-25 60t-59 26h-512q-34 0-60-26t-26-60v-512q0-34 26-59t60-25h512zM170 256v598h598v84h-598q-34 0-59-25t-25-59v-598h84z">
         </path>
       </svg>
       <div class="home-nav">
@@ -66,17 +66,20 @@
 
     <div class="home-blog">
       <div class="home-container2">
-        <form th:action="@{/book/{id}/edit(id = ${book.id})}" method="post" th:object="${book}">
+        <form action="/api/book/" method="post" th:object="${book}">
+          <div class="row" hidden="hidden">
+            <input class="input" name="id" id="book-id-input" th:value="*{id}" placeholder="Title..."/>
+          </div>
           <div class="row">
-            <input class="input" name="title" th:value="*{title}" placeholder="Title..."/>
+            <input class="input" name="title" id="book-name-input" th:value="*{title}" placeholder="Title..."/>
           </div>
           <div class="row">
             <p>Publication year</p>
-            <input class="input" th:value="*{publicationYear}" name="publicationYear" placeholder="2000"/>
+            <input class="input" id="book-year-input" th:value="*{publicationYear}" name="publicationYear" placeholder="2000"/>
           </div>
           <div class="row">
-            <label for="author">Select author</label>
-            <select class="input" id="author" th:field="*{author.id}">
+            <label for="book-author-input">Select author</label>
+            <select class="input" id="book-author-input" th:field="*{author.id}">
               <option th:each="author : ${authors}"
                       th:selected="${author.id.equals(book.author.id)}"
                       th:value="${author.id}"
@@ -84,8 +87,8 @@
             </select>
           </div>
           <div class="row">
-            <label for="genre">Select genre</label>
-            <select class="input" id="genre" th:field="*{genre.id}">
+            <label for="book-genre-input">Select genre</label>
+            <select class="input" id="book-genre-input" th:field="*{genre.id}">
               <option th:each="genre : ${genres}"
                       th:selected="${genre.id.equals(book.genre.id)}"
                       th:value="${genre.id}"
@@ -93,13 +96,55 @@
             </select>
           </div>
           <div class="row">
-            <button class="button" type="submit">Save</button>
+            <button class="button" id="save-book-button" type="submit">Save</button>
           </div>
         </form>
-
       </div>
     </div>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const button = document.getElementById('save-book-button');
+
+    button.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      console.log("Save Book");
+      const bookId = document.getElementById("book-id-input");
+      const bootTitle = document.getElementById("book-name-input");
+      const publicationYear = document.getElementById("book-year-input");
+      const author = document.getElementById("book-author-input");
+      const genre = document.getElementById("book-genre-input");
+      const book = {
+        id: bookId.value, title: bootTitle.value,
+        publicationYear: publicationYear.value,
+        author: { id: author.value, name: ""},
+        genre: { id: genre.value, name: ""}
+      };
+
+
+      fetch("/api/book", {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(book)
+      }).then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            const id = data.id;
+            console.log(id);
+            // Redirect to the desired URL
+            window.location.href = "/book/" + id;
+          });
+        }
+      }).catch(error => {
+        console.log(error);
+      });
+    });
+  });
+</script>
 </body>
 </html>

@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.library.ajax.dao.AuthorsDao;
 import ru.otus.library.ajax.models.Author;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -36,6 +37,8 @@ public class AuthorsServiceImplTest {
   @Test
   void shouldSaveAuthor() {
     Author newAuthor = new Author("Sample Author");
+    doReturn(newAuthor).when(authorsDao).save(any(Author.class));
+
     authorsService.addAuthor(newAuthor.getName());
     verify(authorsDao).save(newAuthor);
   }
