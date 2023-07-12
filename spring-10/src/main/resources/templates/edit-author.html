@@ -44,6 +44,7 @@
           data-tag="font"
   />
   <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
+  <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
 </head>
 <body>
 <div>
@@ -68,23 +69,50 @@
 
     <div class="home-blog">
       <div class="home-container2">
-        <form th:action="@{/author/{id}(id = ${author.id})}"
-              method="post"
-              th:object="${author}">
+        <form th:object="${author}" action="/api/author" method="post">
           <div class="row">
-            <input class="input" name="id" hidden="hidden" th:value="*{id}" placeholder="Author id..."/>
+            <input class="input" id="author-id-input" name="id" hidden="hidden" th:value="*{id}" placeholder="Author id..."/>
           </div>
           <div class="row">
-            <input class="input" name="name" th:value="*{name}" placeholder="Name..."/>
+            <input class="input" id="author-name-input" name="name" th:value="*{name}" placeholder="Name..."/>
           </div>
           <div class="row">
-            <button class="button" type="submit">Save</button>
+            <button id="save-author-button" class="button">Save</button>
           </div>
         </form>
-
       </div>
     </div>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const button = document.getElementById('save-author-button');
+
+      button.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        console.log("Save Author");
+        const authorId = document.getElementById("author-id-input");
+        const authorName = document.getElementById("author-name-input");
+        const author = { id: authorId.value, name: authorName.value };
+
+        fetch("/api/author", {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(author)
+        }).then(response => {
+          if (response.ok) {
+            // Redirect to the desired URL
+            window.location.href = "/authors";
+          }
+        }).catch(error => {
+          console.log(error);
+        });
+      });
+    });
+  </script>
 </div>
 </body>
 </html>

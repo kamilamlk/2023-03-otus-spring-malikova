@@ -70,27 +70,27 @@
       <div class="home-container2">
         <form action="/book" method="post">
           <div class="row">
-            <input class="input" name="title" placeholder="Title..."/>
+            <input class="input" id="book-name-input" name="title" placeholder="Title..."/>
           </div>
           <div class="row">
             <p>Publication year</p>
-            <input class="input" name="publicationYear" placeholder="2000"/>
+            <input class="input" id="book-year-input" name="publicationYear" placeholder="2000"/>
           </div>
           <div class="row">
-            <label for="author">Select author</label>
-            <select class="input" id="author" name="author.id">
+            <label for="book-author-input">Select author</label>
+            <select class="input" id="book-author-input" name="author.id">
               <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"> </option>
             </select>
           </div>
 
           <div class="row">
-            <label for="genre">Select author</label>
-            <select class="input" id="genre" name="genre.id">
+            <label for="book-genre-input">Select author</label>
+            <select class="input" id="book-genre-input" name="genre.id">
               <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"> </option>
             </select>
           </div>
           <div class="row">
-            <button class="button" type="submit">Add</button>
+            <button class="button" id="save-book-button" type="submit">Add</button>
           </div>
         </form>
 
@@ -98,5 +98,46 @@
     </div>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const button = document.getElementById('save-book-button');
+
+    button.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      console.log("Save Book");
+      const bootTitle = document.getElementById("book-name-input");
+      const publicationYear = document.getElementById("book-year-input");
+      const author = document.getElementById("book-author-input");
+      const genre = document.getElementById("book-genre-input");
+      const book = {
+        id: null, title: bootTitle.value,
+        publicationYear: publicationYear.value,
+        author: { id: author.value, name: ""},
+        genre: { id: genre.value, name: ""}
+      };
+
+      fetch("/api/book", {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(book)
+      }).then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            const id = data.id;
+            console.log(id);
+            // Redirect to the desired URL
+            window.location.href = "/book/" + id;
+          });
+        }
+      }).catch(error => {
+        console.log(error);
+      });
+    });
+  });
+</script>
 </body>
 </html>

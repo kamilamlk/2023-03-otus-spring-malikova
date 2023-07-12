@@ -18,6 +18,9 @@ import ru.otus.library.ajax.service.CommentsService;
 public class CommentsController {
   private final CommentsService commentsService;
 
+  /**
+   * Shows a comment.
+   */
   @GetMapping("/book/{id}/comment/{commentId}")
   public String showCommentEditPage(@PathVariable("id") String bookId,
                                     @PathVariable("commentId") String commentId,

@@ -38,6 +38,7 @@
 
       }
     </style>
+    <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
@@ -60,34 +61,40 @@
             <nav
               class="navigation-links-nav navigation-links-root-class-name10"
             >
-              <span class="navigation-links-text"><a href="/" th:href="@{/}">Books</a></span>
-              <span class="navigation-links-text"><a href="/authors" th:href="@{/authors}">Authors</a></span>
-              <span class="navigation-links-text"><a href="/genres" th:href="@{/genres}">Genres</a></span>
+              <span class="navigation-links-text"><a href="/">Books</a></span>
+              <span class="navigation-links-text"><a href="/authors">Authors</a></span>
+              <span class="navigation-links-text"><a href="/genres">Genres</a></span>
             </nav>
           </div>
           <div class="home-btn-group"></div>
         </header>
 
         <div class="home-blog">
-          <div class="home-container2" th:each="book : ${books}" th:object="${book}">
-            <h2 class="home-text" th:text="*{title}">Title</h2>
-            <span class="blog-text" th:text="*{author.getName()}">Author</span>
-            <span class="blog-text" th:text="*{genre.getName()}">Genre</span>
-            <a class="blog-text"
-              href="/book/id" th:href="@{/book/{id}(id = ${book.id})}">
-              Read more...
-            </a>
-          </div>
-
+          <div id="books-block"></div>
           <div>
             <a class="blog-text"
-               href="/book" th:href="@{/book}">
+               href="/book">
               Add a new book
             </a>
           </div>
         </div>
-
       </div>
     </div>
+    <script>
+      $(document).ready($(function () {
+        let booksElement = document.getElementById("books-block")
+        $.get('/api/book').done(function (books) {
+          books.forEach(function (book) {
+            booksElement.innerHTML += "<div class=\"home-container2\">"
+                    + "<h2 class=\"home-text\"> " + book.title + "</h2>"
+                    + "<span class=\"blog-text\">" + book.author.name + "</span>"
+                    + "<span class=\"blog-text\">" + book.genre.name +"</span>"
+                    + "<a class=\"blog-text\" href=\"/book/" + book.id + "\">Read more...</a>"
+                    + "</div>"
+          });
+        })
+      })
+      )
+    </script>
   </body>
 </html>

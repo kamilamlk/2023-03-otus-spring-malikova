@@ -16,8 +16,11 @@ import ru.otus.library.ajax.service.GenresService;
 public class GenresController {
   private final GenresService genresService;
 
+  /**
+   * Returns genres
+   */
   @GetMapping("/genres")
-  public String findBooks(Model model) {
+  public String findGenres(Model model) {
     List<GenreDto> genres = genresService.findGenres()
                                       .stream()
                                       .map(GenreDto::toDto).toList();

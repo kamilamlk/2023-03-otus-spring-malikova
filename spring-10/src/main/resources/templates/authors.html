@@ -44,6 +44,7 @@
             data-tag="font"
     />
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
+    <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
 </head>
 <body>
 <div>
@@ -57,9 +58,7 @@
                 </path>
             </svg>
             <div class="home-nav">
-                <nav
-                        class="navigation-links-nav navigation-links-root-class-name10"
-                >
+                <nav class="navigation-links-nav navigation-links-root-class-name10">
                     <span class="navigation-links-text"><a href="/" th:href="@{/}">Books</a></span>
                     <span class="navigation-links-text"><a href="/authors" th:href="@{/authors}">Authors</a></span>
                     <span class="navigation-links-text"><a href="/genres" th:href="@{/genres}">Genres</a></span>
@@ -69,25 +68,62 @@
         </header>
 
         <div class="home-blog">
-            <div class="small-container" th:each="author : ${authors}" th:object="${author}">
-                <h2 class="small-text" th:text="*{name}">Title</h2>
-                <a th:href="@{/author/{id}(id=${author.id})}"
-                   class="smallest-text">
-                    <button type="button">Edit</button>
-                </a>
-            </div>
+            <div id ="authors-block"></div>
             <div class="input-form">
-                <form id="comment-add-form" action="authors.html"
-                      th:action="@{/author}"
-                      th:method="post">
-                    <input class="input" name="name" placeholder="New author"/>
+                <form id="comment-add-form" action="/api/author" method="post">
+                    <input class="input" id="author-name-input" name="name" placeholder="New author"/>
                     <div class="row">
-                        <button class="button" type="submit">Add</button>
+                        <button class="button" id="save-author-button" type="submit">Add</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+    <script>
+        $(document).ready($(function () {
+                let authorsElement = document.getElementById("authors-block")
+                $.get('/api/author').done(function (authors) {
+                    authors.forEach(function (author) {
+                        authorsElement.innerHTML +=
+                            "<div class=\"small-container\">" +
+                            "   <h2 class=\"small-text\">"+ author.name + "</h2>" +
+                            "   <a href=\"/author/" + author.id + "\" class=\"smallest-text\">" +
+                            "       <button type=\"button\">Edit</button>" +
+                            "   </a>" +
+                            "</div>"
+                    });
+                })
+            })
+        );
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('save-author-button');
+
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent form submission
+
+                console.log("Save Author");
+                const authorName = document.getElementById("author-name-input");
+                const author = { id: null, name: authorName.value };
+
+                fetch("/api/author", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(author)
+                }).then(response => {
+                    if (response.ok) {
+                        // Redirect to the desired URL
+                        window.location.href = "/authors";
+                    }
+                }).catch(error => {
+                    console.log(error);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

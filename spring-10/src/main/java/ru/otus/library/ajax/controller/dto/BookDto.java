@@ -20,6 +20,10 @@ public class BookDto {
   private GenreDto genre;
   private List<CommentDto> comments;
 
+  public BookDto(String id) {
+    this.id = id;
+  }
+
   /**
    * Creates DTO.
    */
