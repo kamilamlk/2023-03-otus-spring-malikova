@@ -4,9 +4,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.library.flux.controller.dto.AuthorDto;
-import ru.otus.library.flux.controller.dto.CommentDto;
-import ru.otus.library.flux.controller.dto.GenreDto;
 import ru.otus.library.flux.models.Book;
 
 /**
@@ -41,6 +38,17 @@ public class BookDto {
                     .stream()
                     .map(CommentDto::toDto)
                     .toList()
+    );
+  }
+
+  /**
+   * Return Book instance.
+   */
+  public Book toBook() {
+    return new Book(
+            id, title, publicationYear,
+            author.toAuthor(), genre.toGenre(),
+            List.of()
     );
   }
 }

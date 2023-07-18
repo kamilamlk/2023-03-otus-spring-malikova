@@ -8,4 +8,6 @@ import ru.otus.library.flux.models.Comment;
  */
 public interface CommentsDao extends MongoRepository<Comment, String> {
   void deleteByBook_Id(String bookId);
+
+  void findAllByBook_Id(String bookId);
 }

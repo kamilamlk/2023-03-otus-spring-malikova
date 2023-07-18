@@ -17,7 +17,7 @@ public class GenresController {
   private final GenresService genresService;
 
   /**
-   * Returns genres
+   * Returns genres.
    */
   @GetMapping("/genres")
   public String findGenres(Model model) {

@@ -18,4 +18,8 @@ public class AuthorDto {
   public static AuthorDto toDto(Author author) {
     return new AuthorDto(author.getId(), author.getName());
   }
+
+  public Author toAuthor() {
+    return new Author(id, name);
+  }
 }

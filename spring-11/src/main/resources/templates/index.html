@@ -83,7 +83,7 @@
     <script>
       $(document).ready($(function () {
         let booksElement = document.getElementById("books-block")
-        $.get('/api/book').done(function (books) {
+        $.get('/api/flux/book').done(function (books) {
           books.forEach(function (book) {
             booksElement.innerHTML += "<div class=\"home-container2\">"
                     + "<h2 class=\"home-text\"> " + book.title + "</h2>"

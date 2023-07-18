@@ -18,4 +18,8 @@ public class GenreDto {
   public static GenreDto toDto(Genre genre) {
     return new GenreDto(genre.getId(), genre.getName());
   }
+
+  public Genre toGenre() {
+    return new Genre(id, name);
+  }
 }
