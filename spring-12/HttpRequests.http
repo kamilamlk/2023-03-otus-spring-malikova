@@ -1,0 +1,83 @@
+###
+GET http://localhost:8080/api/flux/book
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+GET http://localhost:8080/api/flux/book/1
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+POST http://localhost:8080/api/flux/book
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+  "id": null,
+  "title": "The New Book",
+  "publicationYear": 2000,
+  "author": {
+    "id": "1",
+    "name": "Stephen King"
+  },
+  "genre": {
+    "id": "1",
+    "name": "FICTION"
+  },
+  "comments": []
+}
+
+###
+POST http://localhost:8080/api/flux/book
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+  "id": "1",
+  "title": "The Shining 1",
+  "publicationYear": 1977,
+  "author": {
+    "id": "1",
+    "name": "Stephen King"
+  },
+  "genre": {
+    "id": "1",
+    "name": "FICTION"
+  },
+  "comments": []
+}
+
+###
+GET http://localhost:8080/api/flux/author
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+POST http://localhost:8080/api/flux/author
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+  "id": null,
+  "name": "No author"
+}
+
+###
+GET http://localhost:8080/api/flux/author/1
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+
+###
+GET http://localhost:8080/api/flux/genre
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
